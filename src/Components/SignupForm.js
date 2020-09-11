@@ -1,17 +1,9 @@
 import React from 'react';
 import '../App.css';
 import Header from './Header';
+import ValidationMessage from './ValidationMessage';
 
 import axios from 'axios';
-
-function ValidationMessage(props) {
-  if (!props.valid) {
-    return(
-      <div className='error-msg'>{props.message}</div>
-    )
-  }
-  return null;
-}
 
 class SignupForm extends React.Component {
   state = {
@@ -90,10 +82,10 @@ class SignupForm extends React.Component {
     this.setState({emailValid, errorMsg}, this.validateForm);
   }
 
-  onsubmit = () => {
+  onSubmitHandler = () => {
     // Make a request for a user with a argument
     const this_ = this;
-    axios.post('http://usrlogin.local/users/add', this.state)
+    axios.post('http://usrlogin.local/api/users/signup', this.state)
       .then(function (response) {
         // handle success
         if(!response.data && response.data.error){
@@ -138,7 +130,7 @@ class SignupForm extends React.Component {
               value={this.state.cfpassword} onChange={(e) => this.updateCfPass(e.target.value)} />
             </div>
             <div className="form-controls">
-              <button className="btn btn-primary" type="button" onClick={this.onsubmit} disabled={!this.state.formValid} >SingUp</button>
+              <button className="btn btn-primary" type="button" onClick={this.onSubmitHandler} disabled={!this.state.formValid} >SingUp</button>
             </div>
           </form>
         </div>

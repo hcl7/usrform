@@ -6,12 +6,12 @@ import axios from 'axios';
 
 class ArticleView extends React.Component {
     state = {
-        articles: ['test']
+        articles: []
     }
 
     loadArticles = () => {
         const this_ = this;
-        axios.get('http://usrlogin.local/api/articles/indexAPI')
+        axios.get('http://usrlogin.local/api/articles')
             .then(function (response) {
                 //console.log('Get: ' + response.data);
                 this_.setState({articles: response.data});
@@ -43,7 +43,7 @@ class ArticleView extends React.Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {this.state.articles.map(function(article, i) {
+                            {this.state.articles && Array.isArray(this.state.articles ) && this.state.articles.map(function(article, i) {
                                 return (
                                 <tr key={i}>
                                     <td>{article.title}</td>

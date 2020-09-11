@@ -1,17 +1,9 @@
 import React from 'react';
 import '../App.css';
 import Header from './Header';
+import ValidationMessage from './ValidationMessage';
 
 import axios from 'axios';
-
-function ValidationMessage(props) {
-  if (!props.valid) {
-    return(
-      <div className='error-msg'>{props.message}</div>
-    )
-  }
-  return null;
-}
 
 class LoginForm extends React.Component {
   constructor(props){
@@ -69,7 +61,7 @@ class LoginForm extends React.Component {
 
   routeOnSubmit(){
     if (this.state.errorMsg === 0){
-      this.props.history.push("/articles/indexAPI");
+      this.props.history.push("/articles");
       console.log('state value: '+this.state.errorMsg);
     }
     if (this.state.errorMsg === 1){
@@ -78,10 +70,15 @@ class LoginForm extends React.Component {
     }
   }
 
-  handleSubmit = () => {
+  onSubmitHandler = () => {
     // Make a request for a user with a argument
     const this_ = this;
-    axios.post('http://usrlogin.local/users/loginAPI', this.state)
+    
+    // axios.defaults.headers.common['Access-Control-Allow-Origin'] = 'http://localhost:3000';
+    // axios.defaults.headers.common['Access-Control-Allow-Credentials'] = true;
+    // axios.defaults.headers.common['Access-Control-Allow-Methods'] = "POST, OPTIONS"
+
+    axios.post('http://usrlogin.local/api/users/login', this.state)
       .then(function (response) {
         // handle success
         //console.log('Response: '+response.data.id+';'+response.data.email+';'+response.data.created);
@@ -117,7 +114,7 @@ class LoginForm extends React.Component {
               value={this.state.password} onChange={(e) => this.updatePass(e.target.value)} />
             </div>
             <div className="form-controls">
-              <button className="btn btn-primary" type="button" onClick={this.handleSubmit} disabled={!this.state.formValid} >Login</button>
+              <button className="btn btn-primary" type="button" onClick={this.onSubmitHandler} disabled={!this.state.formValid} >Login</button>
             </div>
           </form>
         </div>

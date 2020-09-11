@@ -12,12 +12,12 @@ class App extends React.Component {
             <main>
             <div className="container">
             <ul className="nav">
-                <li className="nav-item"><Link className="nav-link" to="/articles/indexAPI">Articles</Link></li>
+                <li className="nav-item"><Link className="nav-link" to="/articles">Articles</Link></li>
                 <li className="nav-item"><Link className="nav-link" to="/signup">SignUp</Link></li>
                 <li className="nav-item"><Link className="nav-link" to="/login">Login</Link></li>
             </ul>
             </div>
-            <Route path="/articles/indexAPI" component={ArticleView} />
+            <Route path="/articles" component={ArticleView} />
             <Route path="/signup" component={SignupForm} />
             <Route path='/login' component={LoginForm} />
             </main>
