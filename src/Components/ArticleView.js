@@ -2,7 +2,7 @@ import React from 'react';
 import '../App.css';
 import Header from '../Components/Header';
 
-import axios from 'axios';
+import axios from '../hoc/axios-baseurl';
 
 class ArticleView extends React.Component {
     state = {
@@ -10,19 +10,25 @@ class ArticleView extends React.Component {
     }
 
     loadArticles = () => {
-        const this_ = this;
-        axios.get('http://usrlogin.local/api/articles')
+        const self = this;
+        axios.get('/articles')
             .then(function (response) {
-                //console.log('Get: ' + response.data);
-                this_.setState({articles: response.data});
-                console.log('Articles: ' + response.data);
+                const articles = response.data;
+                const updateArticles = articles.map(article=>{
+                    return {
+                        ...article
+                    }
+                });
+                self.setState({articles: updateArticles});
+                console.log('Articles: ' + updateArticles);
             })
             .catch(function (error) {
                 console.log('Get Error: ' + error.message);
             })
             .finally(function () {
                 
-            });
+            }
+        );
     }
 
     componentDidMount(){

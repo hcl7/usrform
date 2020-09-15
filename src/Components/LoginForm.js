@@ -1,9 +1,8 @@
 import React from 'react';
 import '../App.css';
 import Header from './Header';
-import ValidationMessage from './ValidationMessage';
-
-import axios from 'axios';
+import TextInput from './TextInput';
+import axios from '../hoc/axios-baseurl';
 
 class LoginForm extends React.Component {
   constructor(props){
@@ -43,7 +42,7 @@ class LoginForm extends React.Component {
 
   // email state update;
   updateEmail = (email) => {
-    this.setState({email}, this.validateEmail)
+    this.setState({email}, this.validateEmail);
   }
 
   validateEmail = () => {
@@ -78,10 +77,9 @@ class LoginForm extends React.Component {
     // axios.defaults.headers.common['Access-Control-Allow-Credentials'] = true;
     // axios.defaults.headers.common['Access-Control-Allow-Methods'] = "POST, OPTIONS"
 
-    axios.post('http://usrlogin.local/api/users/login', this.state)
+    axios.post('/users/login', this.state)
       .then(function (response) {
         // handle success
-        //console.log('Response: '+response.data.id+';'+response.data.email+';'+response.data.created);
         this_.setState({errorMsg:response.data.error})
         console.log('Response: '+response.data.message);
         this_.routeOnSubmit();
@@ -101,18 +99,24 @@ class LoginForm extends React.Component {
         <Header header="Login" />
         <div className="row">
           <form action="#" id="js-form">
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <ValidationMessage valid={this.state.emailValid} message={this.state.errorMsg.email} />
-              <input type="email" id="email" name="email" className="form-control"
-              value={this.state.email} onChange={(e) => this.updateEmail(e.target.value)} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <ValidationMessage valid={this.state.passValid} message={this.state.errorMsg.password} />
-              <input type="password" id="password" name="password" className="form-control"
-              value={this.state.password} onChange={(e) => this.updatePass(e.target.value)} />
-            </div>
+          <TextInput
+              htmlFor="email"
+              label="Email"
+              inputValid={this.state.emailValid}
+              errorMsg={this.state.errorMsg.email}
+              inputType="email" id="email" name="email"
+              inputValue={this.state.email}
+              changed={(e) => this.updateEmail(e.target.value)}
+            />
+            <TextInput
+              htmlFor="Password"
+              label="Password"
+              inputValid={this.state.passValid}
+              errorMsg={this.state.errorMsg.password}
+              inputType="password" id="password" name="password"
+              inputValue={this.state.password}
+              changed={(e) => this.updatePass(e.target.value)}
+            />
             <div className="form-controls">
               <button className="btn btn-primary" type="button" onClick={this.onSubmitHandler} disabled={!this.state.formValid} >Login</button>
             </div>

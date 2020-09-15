@@ -1,9 +1,9 @@
 import React from 'react';
 import '../App.css';
 import Header from './Header';
-import ValidationMessage from './ValidationMessage';
+import TextInput from './TextInput';
 
-import axios from 'axios';
+import axios from '../hoc/axios-baseurl';
 
 class SignupForm extends React.Component {
   state = {
@@ -85,11 +85,11 @@ class SignupForm extends React.Component {
   onSubmitHandler = () => {
     // Make a request for a user with a argument
     const this_ = this;
-    axios.post('http://usrlogin.local/api/users/signup', this.state)
+    axios.post('/users/signup', this.state)
       .then(function (response) {
         // handle success
         if(!response.data && response.data.error){
-          this_.setState({errorMsg:response.data.message})
+          this_.setState({errorMsg:response.data.message});
           console.log('Error: ' + this_.errorMsg);
         }
         else{
@@ -111,24 +111,33 @@ class SignupForm extends React.Component {
         <Header header="Signup" />
         <div className="row">
           <form action="#" id="js-form">
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <ValidationMessage valid={this.state.emailValid} message={this.state.errorMsg.email} />
-              <input type="email" id="email" name="email" className="form-control"
-              value={this.state.email} onChange={(e) => this.updateEmail(e.target.value)} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <ValidationMessage valid={this.state.passValid} message={this.state.errorMsg.password} />
-              <input type="password" id="password" name="password" className="form-control"
-              value={this.state.password} onChange={(e) => this.updatePass(e.target.value)} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="cfpassword">Confirm Password</label>
-              <ValidationMessage valid={this.state.cfpassValid} message={this.state.errorMsg.cfpassword} />
-              <input type="password" id="cfpassword" name="cfpassword" className="form-control"
-              value={this.state.cfpassword} onChange={(e) => this.updateCfPass(e.target.value)} />
-            </div>
+          <TextInput
+              htmlFor="emial"
+              label="Email"
+              inputValid={this.state.emailValid}
+              errorMsg={this.state.errorMsg.email}
+              inputType="email" id="email" name="email"
+              inputValue={this.state.email}
+              changed={(e) => this.updateEmail(e.target.value)}
+            />
+            <TextInput
+              htmlFor="Password"
+              label="Password"
+              inputValid={this.state.passValid}
+              errorMsg={this.state.errorMsg.password}
+              inputType="password" id="password" name="password"
+              inputValue={this.state.password}
+              changed={(e) => this.updatePass(e.target.value)}
+            />
+            <TextInput
+              htmlFor="cfpassword"
+              label="Confirm Password"
+              inputValid={this.state.passValid}
+              errorMsg={this.state.errorMsg.password}
+              inputType="password" id="cfpassword" name="cfpassword"
+              inputValue={this.state.cfpassword}
+              changed={(e) => this.updateCfPass(e.target.value)}
+            />
             <div className="form-controls">
               <button className="btn btn-primary" type="button" onClick={this.onSubmitHandler} disabled={!this.state.formValid} >SingUp</button>
             </div>
