@@ -109,7 +109,7 @@ class SignupForm extends React.Component {
     return (
       <div className="container">
         <Header header="Signup" />
-        <div className="row">
+        <div className="row justify-content-center">
           <form action="#" id="js-form">
           <TextInput
               htmlFor="emial"
@@ -143,7 +143,7 @@ class SignupForm extends React.Component {
             </div>
           </form>
         </div>
-        <div className="row">
+        <div className="row justify-content-center">
           <div>{"{"+this.state.email+"}"}</div>
           <div>{"{"+this.state.password+"}"}</div>
           <div>{"{"+this.state.cfpassword+"}"}</div>

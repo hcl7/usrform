@@ -2,7 +2,14 @@ import React from 'react';
 import '../App.css';
 import Header from './Header';
 import TextInput from './TextInput';
+//import SideBar from '../Views/Sidebar';
 import axios from '../hoc/axios-baseurl';
+
+// const sideList = [
+//   {link: '/login', label: 'Login', id: '1'},
+//   {link: '/signup', label: 'SignUp', id: '2'},
+//   {link: '/articles', label: 'Articles', id: '3'},
+// ];
 
 class LoginForm extends React.Component {
   constructor(props){
@@ -97,32 +104,33 @@ class LoginForm extends React.Component {
     return (
       <div className="container">
         <Header header="Login" />
-        <div className="row">
-          <form action="#" id="js-form">
-          <TextInput
-              htmlFor="email"
-              label="Email"
-              inputValid={this.state.emailValid}
-              errorMsg={this.state.errorMsg.email}
-              inputType="email" id="email" name="email"
-              inputValue={this.state.email}
-              changed={(e) => this.updateEmail(e.target.value)}
-            />
+        <div className="row justify-content-center">
+            <form action="#" id="js-form">
             <TextInput
-              htmlFor="Password"
-              label="Password"
-              inputValid={this.state.passValid}
-              errorMsg={this.state.errorMsg.password}
-              inputType="password" id="password" name="password"
-              inputValue={this.state.password}
-              changed={(e) => this.updatePass(e.target.value)}
-            />
-            <div className="form-controls">
-              <button className="btn btn-primary" type="button" onClick={this.onSubmitHandler} disabled={!this.state.formValid} >Login</button>
-            </div>
-          </form>
+                htmlFor="email"
+                label="Email"
+                inputValid={this.state.emailValid}
+                errorMsg={this.state.errorMsg.email}
+                inputType="email" id="email" name="email"
+                inputValue={this.state.email}
+                changed={(e) => this.updateEmail(e.target.value)}
+              />
+              <TextInput
+                htmlFor="Password"
+                label="Password"
+                inputValid={this.state.passValid}
+                errorMsg={this.state.errorMsg.password}
+                inputType="password" id="password" name="password"
+                inputValue={this.state.password}
+                changed={(e) => this.updatePass(e.target.value)}
+              />
+              <div className="form-controls">
+                <button className="btn btn-primary" type="button" onClick={this.onSubmitHandler} disabled={!this.state.formValid} >Login</button>
+              </div>
+            </form>
+            
         </div>
-        <div className="row">
+        <div className="row justify-content-center">
           <div>{"{"+this.state.email+"}"}</div>
           <div>{"{"+this.state.password+"}"}</div>
         </div>
