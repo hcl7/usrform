@@ -3,19 +3,10 @@ import '../App.css';
 import Header from '../Components/Header';
 import SideBar from '../Views/Sidebar';
 import axios from '../hoc/axios-baseurl';
-
+import {sideList, slArticlesHeaders} from '../Helpers/RoutersConfig';
 import SmartList from '../hoc/SmartList';
-
-const sideList = [
-    {link: '/login', label: 'Login', id: '1'},
-    {link: '/signup', label: 'SignUp', id: '2'},
-    {link: '/articles', label: 'Articles', id: '3'},
-];
-
-const smartListHeaders = [
-    {label: 'Title'},
-    {label: 'Created'},
-];
+import Navigation from '../Views/Navigation';
+import Aux from '../hoc/Aux';
 
 class ArticleView extends React.Component {
     state = {
@@ -28,12 +19,12 @@ class ArticleView extends React.Component {
             .then(function (response) {
                 const articles = response.data;
                 const updateArticles = articles.map(article=>{
+                    //console.log('articles: ', article.title);
                     return {
                         ...article
                     }
                 });
                 self.setState({articles: updateArticles});
-                console.log('Articles: ' + updateArticles);
             })
             .catch(function (error) {
                 console.log('Get Error: ' + error.message);
@@ -50,15 +41,16 @@ class ArticleView extends React.Component {
 
     render(){
         return (
-            <div className="container">
-                <Header header="Articles" />
-                <div className="row">
+            <Aux>
+                <Navigation />
+                <div className="row" style={{marginTop: '60px'}}>
                     <div className="col-sm-4">
                         <SideBar sideList={sideList}/>
                     </div>
                     <div className="col-sm-8">
+                        <Header header="Articles" />
                         <SmartList
-                            smartListHeaders={smartListHeaders}
+                            smartListHeaders={slArticlesHeaders}
                             smartListContents={this.state.articles}
                             view={'/articles/view'}
                             edit={'/articles/edit'}
@@ -67,7 +59,7 @@ class ArticleView extends React.Component {
                         />
                     </div>
                 </div> 
-            </div>
+            </Aux>
         );
     }
 }

@@ -1,15 +1,12 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 const navigation = (props) => (
-    <nav class="navbar navbar-expand-sm bg-light fixed-top">
-        <a class="navbar-brand" href="#">Logo</a>
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-            </li>
+    <nav className="navbar navbar-expand-sm bg-light fixed-top">
+        <ul className="navbar-nav">
+            <li className="nav-item"><NavLink className="nav-link" to="/articles">Articles</NavLink></li>
+            <li className="nav-item"><NavLink className="nav-link" to="/signup">SignUp</NavLink></li>
+            <li className="nav-item"><NavLink className="nav-link" to="/login">Login</NavLink></li>
         </ul>
     </nav>
 );
