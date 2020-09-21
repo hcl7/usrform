@@ -19,9 +19,9 @@ const smartList = (props) => (
                         props.smartListHeaders.some(header => header.key === key) ? <td key={i}>{slc[key]}</td> : null
                     ))}
                     <td>
-                        <NavLink to={props.view + '/' + slc[props.id]}>View</NavLink>|
-                        <NavLink to={props.edit + '/' + slc[props.id]}>Edit</NavLink>|
-                        <NavLink to={props.delete + '/' + slc[props.id]}>Delete</NavLink>
+                        <NavLink to={props.view + '/' + slc[props.where]}>View</NavLink>|
+                        <NavLink to={props.edit + '/' + slc[props.where]}>Edit</NavLink>|
+                        <NavLink to={props.delete + '/' + slc[props.where]}>Delete</NavLink>
                     </td>
                 </tr>
             )}

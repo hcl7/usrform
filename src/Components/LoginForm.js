@@ -2,17 +2,13 @@ import React from 'react';
 import '../App.css';
 import Header from './Header';
 import TextInput from './TextInput';
-//import SideBar from '../Views/Sidebar';
+import SideBar from '../Views/Sidebar';
 import axios from '../hoc/axios-baseurl';
-
-// const sideList = [
-//   {link: '/login', label: 'Login', id: '1'},
-//   {link: '/signup', label: 'SignUp', id: '2'},
-//   {link: '/articles', label: 'Articles', id: '3'},
-// ];
+import Navigation from '../Views/Navigation';
+import { sideList } from '../Helpers/RoutersConfig';
 
 class LoginForm extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       email: '', emailValid: false,
@@ -23,63 +19,62 @@ class LoginForm extends React.Component {
   }
 
   validateForm = () => {
-    const {passValid, emailValid} = this.state;
-    this.setState({formValid: passValid && emailValid});
+    const { passValid, emailValid } = this.state;
+    this.setState({ formValid: passValid && emailValid });
   }
 
   //Password state update;
   updatePass = (pass) => {
-    this.setState({password:pass}, this.validatePass);
+    this.setState({ password: pass }, this.validatePass);
   }
 
   validatePass = () => {
-    const {password} = this.state;
+    const { password } = this.state;
     let passValid = true;
-    let errorMsg = {...this.state.errorMsg};
+    let errorMsg = { ...this.state.errorMsg };
 
     // pass validate regex;
-    if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,32}$/.test(password))
-    {
-        passValid = false;
-        errorMsg.password = "Password must have Capital Letter, 8 chars minimum, Numbers and Chars!";
+    if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,32}$/.test(password)) {
+      passValid = false;
+      errorMsg.password = "Password must have Capital Letter, 8 chars minimum, Numbers and Chars!";
     }
 
-    this.setState({passValid, errorMsg}, this.validateForm);
+    this.setState({ passValid, errorMsg }, this.validateForm);
   }
 
   // email state update;
   updateEmail = (email) => {
-    this.setState({email}, this.validateEmail);
+    this.setState({ email }, this.validateEmail);
   }
 
   validateEmail = () => {
-    const {email} = this.state;
+    const { email } = this.state;
     let emailValid = true;
-    let errorMsg = {...this.state.errorMsg};
+    let errorMsg = { ...this.state.errorMsg };
     //email validate regex;
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       emailValid = false;
       errorMsg.email = "Invalid email format";
     }
 
-    this.setState({emailValid, errorMsg}, this.validateForm);
+    this.setState({ emailValid, errorMsg }, this.validateForm);
   }
 
-  routeOnSubmit(){
-    if (this.state.errorMsg === 0){
+  routeOnSubmit() {
+    if (this.state.errorMsg === 0) {
       this.props.history.push("/articles");
-      console.log('state value: '+this.state.errorMsg);
+      console.log('state value: ' + this.state.errorMsg);
     }
-    if (this.state.errorMsg === 1){
+    if (this.state.errorMsg === 1) {
       this.props.history.push("/login");
-      console.log('state value: '+this.state.errorMsg);
+      console.log('state value: ' + this.state.errorMsg);
     }
   }
 
   onSubmitHandler = () => {
     // Make a request for a user with a argument
     const this_ = this;
-    
+
     // axios.defaults.headers.common['Access-Control-Allow-Origin'] = 'http://localhost:3000';
     // axios.defaults.headers.common['Access-Control-Allow-Credentials'] = true;
     // axios.defaults.headers.common['Access-Control-Allow-Methods'] = "POST, OPTIONS"
@@ -87,8 +82,8 @@ class LoginForm extends React.Component {
     axios.post('/users/login', this.state)
       .then(function (response) {
         // handle success
-        this_.setState({errorMsg:response.data.error})
-        console.log('Response: '+response.data.message);
+        this_.setState({ errorMsg: response.data.error })
+        console.log('Response: ' + response.data.message);
         this_.routeOnSubmit();
       })
       .catch(function (error) {
@@ -99,14 +94,19 @@ class LoginForm extends React.Component {
         // always executed
       });
   }
-  
+
   render() {
     return (
       <div className="container">
-        <Header header="Login" />
-        <div className="row justify-content-center">
+        <Navigation />
+        <div className="row justify-content-center" style={{marginTop: '60px'}}>
+          <div className="col-sm-4">
+            <SideBar sideList={sideList} />
+          </div>
+          <div className="col-sm-8">
+            <Header header="Login" />
             <form action="#" id="js-form">
-            <TextInput
+              <TextInput
                 htmlFor="email"
                 label="Email"
                 inputValid={this.state.emailValid}
@@ -128,11 +128,11 @@ class LoginForm extends React.Component {
                 <button className="btn btn-primary" type="button" onClick={this.onSubmitHandler} disabled={!this.state.formValid} >Login</button>
               </div>
             </form>
-            
-        </div>
-        <div className="row justify-content-center">
-          <div>{"{"+this.state.email+"}"}</div>
-          <div>{"{"+this.state.password+"}"}</div>
+            <div className="row justify-content-center">
+              <div>{"{" + this.state.email + "}"}</div>
+              <div>{"{" + this.state.password + "}"}</div>
+            </div>
+          </div>
         </div>
       </div>
     );

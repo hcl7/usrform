@@ -3,23 +3,25 @@ import '../App.css';
 import Header from '../Components/Header';
 import SideBar from '../Views/Sidebar';
 import axios from '../hoc/axios-baseurl';
-import {sideList, slArticlesHeaders} from '../Helpers/RoutersConfig';
+import {sideList, slArticlesHeaders, formatDate} from '../Helpers/RoutersConfig';
 import SmartList from '../hoc/SmartList';
 import Navigation from '../Views/Navigation';
-import Aux from '../hoc/Aux';
 
 class ArticleView extends React.Component {
     state = {
-        articles: []
+        articles: {
+            title: [],
+            created: []
+        }
     }
 
-    loadArticles = () => {
+    loadArticlesHandler = () => {
         const self = this;
         axios.get('/articles')
             .then(function (response) {
                 const articles = response.data;
                 const updateArticles = articles.map(article=>{
-                    //console.log('articles: ', article.title);
+                    console.log('articles: ', formatDate(article.created));
                     return {
                         ...article
                     }
@@ -27,7 +29,7 @@ class ArticleView extends React.Component {
                 self.setState({articles: updateArticles});
             })
             .catch(function (error) {
-                console.log('Get Error: ' + error.message);
+                console.log('Get ArticleView Error: ' + error.message);
             })
             .finally(function () {
                 
@@ -36,12 +38,12 @@ class ArticleView extends React.Component {
     }
 
     componentDidMount(){
-        this.loadArticles();
+        this.loadArticlesHandler();
     }
 
     render(){
         return (
-            <Aux>
+            <div className="container">
                 <Navigation />
                 <div className="row" style={{marginTop: '60px'}}>
                     <div className="col-sm-4">
@@ -55,11 +57,11 @@ class ArticleView extends React.Component {
                             view={'/articles/view'}
                             edit={'/articles/edit'}
                             delete={'/articles/delete'}
-                            id="id" 
+                            where="id" 
                         />
                     </div>
                 </div> 
-            </Aux>
+            </div>
         );
     }
 }
