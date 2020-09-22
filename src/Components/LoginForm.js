@@ -8,14 +8,12 @@ import Navigation from '../Views/Navigation';
 import { sideList } from '../Helpers/RoutersConfig';
 
 class LoginForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: '', emailValid: false,
-      password: '', passValid: false,
-      formValid: false,
-      errorMsg: {}
-    }
+  
+  state = {
+    email: '', emailValid: false,
+    password: '', passValid: false,
+    formValid: false,
+    errorMsg: {}
   }
 
   validateForm = () => {
@@ -99,7 +97,7 @@ class LoginForm extends React.Component {
     return (
       <div className="container">
         <Navigation />
-        <div className="row justify-content-center" style={{marginTop: '60px'}}>
+        <div className="row justify-content-center" style={{ marginTop: '60px' }}>
           <div className="col-sm-4">
             <SideBar sideList={sideList} />
           </div>

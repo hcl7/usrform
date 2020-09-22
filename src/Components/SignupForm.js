@@ -8,6 +8,7 @@ import { sideList} from '../Helpers/RoutersConfig';
 import Navigation from '../Views/Navigation';
 
 class SignupForm extends React.Component {
+  
   state = {
     email: '', emailValid: false,
     password: '', passValid: false,
