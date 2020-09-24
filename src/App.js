@@ -7,6 +7,8 @@ import Users from './Components/Users';
 import UserView from './Views/UserView';
 import Tags from './Components/Tags';
 import Navigation from './Views/Navigation';
+import TagView from './Views/TagView';
+import UserEdit from './Views/UserEdit';
 
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
@@ -25,8 +27,9 @@ class App extends React.Component {
                         <Route path='/login' component={LoginForm} />
                         <Route path='/users' exact component={Users} />
                         <Route path='/users/view/:id' component={UserView} />
+                        <Route path='/users/edit/:id' component={UserEdit} />
                         <Route path='/tags' exact component={Tags} />
-                        <Route path='/tags/view/:id' component={Tags} />
+                        <Route path='/tags/view/:id' component={TagView} />
                     </Switch>
                 </main>
             </Router>

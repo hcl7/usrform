@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-const smartList = (props) => (
+const smartList = (props) => (  
     <table className="table table-bordered">
         <thead>
             <tr>

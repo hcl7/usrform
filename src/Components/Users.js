@@ -6,11 +6,11 @@ import { sideList, slUserHeaders, formatDate } from '../Helpers/RoutersConfig';
 import SmartList from '../hoc/SmartList';
 import Navigation from '../Views/Navigation';
 
-
 class Users extends Component {
 
     state = {
-        users: []
+        users: [],
+        selecteUser: []
     }
 
     loadUsersHandler = () => {
@@ -19,7 +19,7 @@ class Users extends Component {
             .then(function (response) {
                 const users = response.data;
                 const updateUsers = users.map(user => {
-                    console.log('Users: ', user);
+                    console.log('User: ', user);
                     user.created = formatDate(user.created);
                     user.modified = formatDate(user.modified);
                     return {
@@ -31,14 +31,11 @@ class Users extends Component {
             .catch(function (error) {
                 console.log('Get Users Error: ' + error.message);
             })
-            .finally(function () {
-
-            }
+            .finally(function () {}
         );
     }
 
     componentDidMount() {
-        console.log("Users Loaded!");
         this.loadUsersHandler();
     }
 
