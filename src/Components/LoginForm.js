@@ -71,12 +71,12 @@ class LoginForm extends React.Component {
 
   onSubmitHandler = () => {
     // Make a request for a user with a argument
-    const this_ = this;
+    const self = this;
     axios.post('/users/login', this.state)
       .then(function (response) {
-        this_.setState({ errorMsg: response.data.error })
+        self.setState({ errorMsg: response.data.error })
         console.log('Response: ' + response.data.message);
-        this_.routeOnSubmit();
+        self.routeOnSubmit();
       })
       .catch(function (error) {
         console.log('Post Error: ' + error.message);

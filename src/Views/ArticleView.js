@@ -18,8 +18,7 @@ class ArticleView extends Component {
             .then(function (response) {
                 const article = response.data;
                 console.log('tags: ', article.tags);
-                self.setState({ article: article });
-                self.setState({tags: article.tags});
+                self.setState({ article: article, tags: article.tags});
             })
             .catch(function (error) {
                 console.log('Get Article Error: ' + error.message);

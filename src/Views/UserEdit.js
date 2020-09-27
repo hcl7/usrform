@@ -5,11 +5,57 @@ import axios from '../hoc/axios-baseurl';
 
 class UserEdit extends Component {
     state = {
-        email: null,
-        pass: ''
+        id: '',
+        email: '', emailValid: false,
+        password: '', passValid: false,
+        formValid: false,
+        errorMsg: {},
+        posted: false
     }
 
-    componentDidMount(){
+    validateForm = () => {
+        const { passValid, emailValid } = this.state;
+        this.setState({ formValid: passValid && emailValid });
+    }
+
+    //Password state update;
+    updatePass = (pass) => {
+        this.setState({ password: pass }, this.validatePass);
+    }
+
+    validatePass = () => {
+        const { password } = this.state;
+        let passValid = true;
+        let errorMsg = { ...this.state.errorMsg };
+
+        // pass validate regex;
+        if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,32}$/.test(password)) {
+            passValid = false;
+            errorMsg.password = "Password must have Capital Letter, 8 chars minimum, Numbers and Chars!";
+        }
+
+        this.setState({ passValid, errorMsg }, this.validateForm);
+    }
+
+    // email state update;
+    updateEmail = (email) => {
+        this.setState({ email }, this.validateEmail);
+    }
+
+    validateEmail = () => {
+        const { email } = this.state;
+        let emailValid = true;
+        let errorMsg = { ...this.state.errorMsg };
+        //email validate regex;
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            emailValid = false;
+            errorMsg.email = "Invalid email format";
+        }
+
+        this.setState({ emailValid, errorMsg }, this.validateForm);
+    }
+
+    componentDidMount() {
         this.loadUserHandler();
     }
 
@@ -19,9 +65,8 @@ class UserEdit extends Component {
         axios.get('/users/view/' + id)
             .then(function (response) {
                 const user = response.data
-                console.log("User Edit: ", user);
-                self.setState({ email: user.email });
-            
+                self.setState({ email: user.email, id: user.id});
+                console.log('User email: ', self.state.email);
             })
             .catch(function (error) {
                 console.log("Get Error User:" + error.message);
@@ -29,8 +74,20 @@ class UserEdit extends Component {
             .finally(function () { });
     }
 
-    onSubmitHandler = () =>{
-
+    onSubmitHandler = () => {
+        const self = this;
+        const userPost = self.state;
+        let id = this.props.match.params.id;
+        axios.post('/users/edit/'+id, userPost)
+            .then(response => {
+                console.log('post:', response.data.message);
+                self.setState({posted: true});
+                this.props.history.push('/users/');
+            })
+            .catch(function (error){
+                console.log('Post Error: ' + error.message)
+            })
+            .finally(function () { });
     }
 
     render() {
@@ -39,14 +96,20 @@ class UserEdit extends Component {
                 <TextInput
                     htmlFor="email"
                     label="Email"
+                    inputValid={this.state.emailValid}
+                    errorMsg={this.state.errorMsg.email}
                     inputType="email" id="email" name="email"
                     inputValue={this.state.email}
+                    changed={(e) => this.updateEmail(e.target.value)}
                 />
                 <TextInput
                     htmlFor="Password"
                     label="Password"
+                    inputValid={this.state.passValid}
+                    errorMsg={this.state.errorMsg.password}
                     inputType="password" id="password" name="password"
-                    inputValue={this.state.pass}
+                    inputValue={this.state.password}
+                    changed={(e) => this.updatePass(e.target.value)}
                 />
                 <div className="form-controls">
                     <button className="btn btn-danger" type="button" onClick={this.onSubmitHandler}>Edit User</button>
