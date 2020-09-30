@@ -10,7 +10,8 @@ class UserEdit extends Component {
         password: '', passValid: false,
         formValid: false,
         errorMsg: {},
-        posted: false
+        posted: false,
+        error: []
     }
 
     validateForm = () => {
@@ -81,8 +82,11 @@ class UserEdit extends Component {
         axios.post('/users/edit/'+id, userPost)
             .then(response => {
                 console.log('post:', response.data.message);
-                self.setState({posted: true});
-                this.props.history.push('/users/');
+                self.setState({posted: true, error: response.data.message});
+                this.props.history.push({
+                    pathname: '/users/',
+                    statusMessage: this.state.error
+                });
             })
             .catch(function (error){
                 console.log('Post Error: ' + error.message)
@@ -93,6 +97,7 @@ class UserEdit extends Component {
     render() {
         return (
             <Layout title="User Edit">
+                
                 <TextInput
                     htmlFor="email"
                     label="Email"

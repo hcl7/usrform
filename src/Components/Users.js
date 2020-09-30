@@ -5,6 +5,8 @@ import axios from '../hoc/axios-baseurl';
 import { sideList, slUserHeaders, formatDate } from '../Helpers/RoutersConfig';
 import SmartList from '../hoc/SmartList';
 import Navigation from '../Views/Navigation';
+import Alert from '../Helpers/Alert';
+//import Spinner from '../Helpers/Spinner';
 
 class Users extends Component {
 
@@ -40,6 +42,7 @@ class Users extends Component {
     }
 
     render() {
+        
         return (
             <div className="container">
                 <Navigation />
@@ -49,6 +52,8 @@ class Users extends Component {
                     </div>
                     <div className="col-sm-8">
                         <Header header="Users" />
+                        {this.props.location.statusMessage ? <Alert mode="success" msg={this.props.location.statusMessage} /> : null}
+                        {/* <Spinner /> */}
                         <SmartList
                             smartListHeaders={slUserHeaders}
                             smartListContents={this.state.users}
