@@ -9,6 +9,7 @@ import Tags from './Components/Tags';
 import Navigation from './Views/Navigation';
 import TagView from './Views/TagView';
 import UserEdit from './Views/UserEdit';
+import ArticleEdit from './Views/ArticleEdit';
 
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
@@ -23,6 +24,7 @@ class App extends React.Component {
                     <Switch>
                         <Route path='/articles' exact component={Articles} />
                         <Route path='/articles/view/:id' component={ArticleView} />
+                        <Route path='/articles/edit/:id' component={ArticleEdit} />
                         <Route path="/signup" component={SignupForm} />
                         <Route path='/login' component={LoginForm} />
                         <Route path='/users' exact component={Users} />

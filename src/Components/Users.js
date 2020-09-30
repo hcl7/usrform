@@ -6,13 +6,14 @@ import { sideList, slUserHeaders, formatDate } from '../Helpers/RoutersConfig';
 import SmartList from '../hoc/SmartList';
 import Navigation from '../Views/Navigation';
 import Alert from '../Helpers/Alert';
-//import Spinner from '../Helpers/Spinner';
+import Spinner from '../Helpers/Spinner';
 
 class Users extends Component {
 
     state = {
         users: [],
-        selecteUser: []
+        selecteUser: [],
+        loading: true
     }
 
     loadUsersHandler = () => {
@@ -28,13 +29,13 @@ class Users extends Component {
                         ...user
                     }
                 })
-                self.setState({ users: updateUsers });
+                self.setState({ users: updateUsers, loading: false });
             })
             .catch(function (error) {
                 console.log('Get Users Error: ' + error.message);
             })
-            .finally(function () {}
-        );
+            .finally(function () { }
+            );
     }
 
     componentDidMount() {
@@ -42,26 +43,33 @@ class Users extends Component {
     }
 
     render() {
-        
+        let spinner = null;
+        if (this.state.loading) {
+            spinner = <Spinner />;
+        }
+        else {
+            spinner = (
+                <SmartList
+                    smartListHeaders={slUserHeaders}
+                    smartListContents={this.state.users}
+                    view={'/users/view'}
+                    edit={'/users/edit'}
+                    delete={'/users/delete'}
+                    where="id"
+                />
+            );
+        }
         return (
             <div className="container">
                 <Navigation />
-                <div className="row" style={{marginTop: '60px'}}>
+                <div className="row" style={{ marginTop: '60px' }}>
                     <div className="col-sm-4">
                         <SideBar sideList={sideList} />
                     </div>
                     <div className="col-sm-8">
                         <Header header="Users" />
                         {this.props.location.statusMessage ? <Alert mode="success" msg={this.props.location.statusMessage} /> : null}
-                        {/* <Spinner /> */}
-                        <SmartList
-                            smartListHeaders={slUserHeaders}
-                            smartListContents={this.state.users}
-                            view={'/users/view'}
-                            edit={'/users/edit'}
-                            delete={'/users/delete'}
-                            where="id"
-                        />
+                        {spinner}
                     </div>
                 </div>
             </div>

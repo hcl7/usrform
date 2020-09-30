@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Layout from '../hoc/Layout';
 import TextInput from '../Components/TextInput';
 import axios from '../hoc/axios-baseurl';
+import Alert from '../Helpers/Alert';
 
 class UserEdit extends Component {
     state = {
@@ -10,7 +11,7 @@ class UserEdit extends Component {
         password: '', passValid: false,
         formValid: false,
         errorMsg: {},
-        posted: false,
+        posted: true,
         error: []
     }
 
@@ -79,7 +80,7 @@ class UserEdit extends Component {
         const self = this;
         const userPost = self.state;
         let id = this.props.match.params.id;
-        axios.post('/users/edit/'+id, userPost)
+        axios.post('/users/edit/' + id, userPost)
             .then(response => {
                 console.log('post:', response.data.message);
                 self.setState({posted: true, error: response.data.message});
@@ -89,7 +90,8 @@ class UserEdit extends Component {
                 });
             })
             .catch(function (error){
-                console.log('Post Error: ' + error.message)
+                console.log('Post Error: ' + error.message);
+                self.setState({posted: false, error: error.message});
             })
             .finally(function () { });
     }
@@ -97,7 +99,7 @@ class UserEdit extends Component {
     render() {
         return (
             <Layout title="User Edit">
-                
+                {!this.state.posted ? <Alert mode="success" msg={this.state.error} /> : null}
                 <TextInput
                     htmlFor="email"
                     label="Email"
