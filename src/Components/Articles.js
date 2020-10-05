@@ -7,13 +7,18 @@ import SmartList from '../hoc/SmartList';
 import Navigation from '../Views/Navigation';
 import Alert from '../Helpers/Alert';
 import Spinner from '../Helpers/Spinner';
+import { connect } from 'react-redux';
 
 class Articles extends Component {
-
+    
     state = {
         articles: [],
         loading: true
     }
+
+    parentFunction = (d) =>{
+        console.log(d);
+    } 
 
     loadArticlesHandler = () => {
         const self = this;
@@ -43,11 +48,11 @@ class Articles extends Component {
     }
 
     render() {
-        let spinner = null;
+        let smartlist = null;
         if (this.state.loading) {
-            spinner = <Spinner />
+            smartlist = <Spinner />
         } else {
-            spinner = (
+            smartlist = (
                 <SmartList
                     smartListHeaders={slArticlesHeaders}
                     smartListContents={this.state.articles}
@@ -67,8 +72,8 @@ class Articles extends Component {
                     </div>
                     <div className="col-sm-8">
                         <Header header="Articles" />
-                        {this.props.location.statusMessage ? <Alert mode="success" msg={this.props.location.statusMessage} /> : null}
-                        {spinner}
+                        {this.props.err ? <Alert mode="success" msg={this.props.err} /> : null}
+                        {smartlist}
                     </div>
                 </div>
             </div>
@@ -76,4 +81,10 @@ class Articles extends Component {
     }
 }
 
-export default Articles;
+const mapStateToProps = state =>{
+    return {
+        err: state.resError
+    }
+}
+
+export default connect(mapStateToProps)(Articles);

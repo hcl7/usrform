@@ -1,7 +1,7 @@
 import React from 'react';
 import '../App.css';
 import Header from './Header';
-import TextInput from './TextInput';
+import Input from './Input';
 import SideBar from '../Views/Sidebar';
 import axios from '../hoc/axios-baseurl';
 import { sideList} from '../Helpers/RoutersConfig';
@@ -119,31 +119,34 @@ class SignupForm extends React.Component {
           <div className="col-sm-8">
             <Header header="Signup" />
             <form action="#" id="js-form">
-              <TextInput
+              <Input
                 htmlFor="emial"
                 label="Email"
-                inputValid={this.state.emailValid}
-                errorMsg={this.state.errorMsg.email}
-                inputType="email" id="email" name="email"
-                inputValue={this.state.email}
+                valid={this.state.emailValid}
+                message={this.state.errorMsg.email}
+                elementType="input"
+                type="email" id="email" name="email"
+                value={this.state.email}
                 changed={(e) => this.updateEmail(e.target.value)}
               />
-              <TextInput
+              <Input
                 htmlFor="Password"
                 label="Password"
-                inputValid={this.state.passValid}
-                errorMsg={this.state.errorMsg.password}
-                inputType="password" id="password" name="password"
-                inputValue={this.state.password}
+                valid={this.state.passValid}
+                message={this.state.errorMsg.password}
+                elementType="input"
+                type="password" id="password" name="password"
+                value={this.state.password}
                 changed={(e) => this.updatePass(e.target.value)}
               />
-              <TextInput
+              <Input
                 htmlFor="cfpassword"
                 label="Confirm Password"
-                inputValid={this.state.passValid}
-                errorMsg={this.state.errorMsg.password}
-                inputType="password" id="cfpassword" name="cfpassword"
-                inputValue={this.state.cfpassword}
+                valid={this.state.passValid}
+                message={this.state.errorMsg.password}
+                elementType="input"
+                type="password" id="cfpassword" name="cfpassword"
+                value={this.state.cfpassword}
                 changed={(e) => this.updateCfPass(e.target.value)}
               />
               <div className="form-controls">

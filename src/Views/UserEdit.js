@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Layout from '../hoc/Layout';
-import TextInput from '../Components/TextInput';
+import Input from '../Components/Input';
 import axios from '../hoc/axios-baseurl';
 import Alert from '../Helpers/Alert';
 
@@ -100,22 +100,24 @@ class UserEdit extends Component {
         return (
             <Layout title="User Edit">
                 {!this.state.posted ? <Alert mode="success" msg={this.state.error} /> : null}
-                <TextInput
+                <Input
                     htmlFor="email"
                     label="Email"
-                    inputValid={this.state.emailValid}
-                    errorMsg={this.state.errorMsg.email}
-                    inputType="email" id="email" name="email"
-                    inputValue={this.state.email}
+                    valid={this.state.emailValid}
+                    message={this.state.errorMsg.email}
+                    elementType="input"
+                    type="email" id="email" name="email"
+                    value={this.state.email}
                     changed={(e) => this.updateEmail(e.target.value)}
                 />
-                <TextInput
+                <Input
                     htmlFor="Password"
                     label="Password"
-                    inputValid={this.state.passValid}
-                    errorMsg={this.state.errorMsg.password}
-                    inputType="password" id="password" name="password"
-                    inputValue={this.state.password}
+                    valid={this.state.passValid}
+                    message={this.state.errorMsg.password}
+                    elementType="input"
+                    type="password" id="password" name="password"
+                    value={this.state.password}
                     changed={(e) => this.updatePass(e.target.value)}
                 />
                 <div className="form-controls">

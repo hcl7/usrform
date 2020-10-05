@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import axios from '../hoc/axios-baseurl';
 import Layout from '../hoc/Layout';
-import TextInput from '../Components/TextInput';
+import Input from '../Components/Input';
 import Alert from '../Helpers/Alert';
+import * as actionType from '../store/actions';
+import { connect } from 'react-redux';
 
 class ArticleEdit extends Component {
 
@@ -10,8 +12,7 @@ class ArticleEdit extends Component {
         title: '',
         body: '',
         posted: true,
-        tags: [],
-        error: []
+        tags: []
     }
 
     componentDidMount() {
@@ -23,7 +24,7 @@ class ArticleEdit extends Component {
         let id = this.props.match.params.id;
         axios.get('/articles/view/' + id)
             .then(function (response) {
-                console.log('Artcle data: ', response.data.tags);
+                console.log('Artcle data: ', response.data);
                 const article = response.data;
                 const tags = response.data.tags;
                 self.setState({ title: article.title, body: article.body, tags: tags });
@@ -35,26 +36,33 @@ class ArticleEdit extends Component {
             .finally(function () { });
     }
 
-    changedHandler = (e) => {
-        this.setState({ [e.target.name]: e.target.value });
+    changedTitleHandler = (e) => {
+        this.setState({ title: e.target.value });
     }
 
-    onSubmitHandler = () => {
+    changedBodyHandler = (e) => {
+        this.setState({body: e.target.value});
+    }
+
+    changedSelectHandler = (e) => {
+        this.setState({[e.target.name]: e.target.value});
+    }
+
+    onSubmitHandler = (e) => {
         const self = this;
         const articlePost = self.state;
         let id = this.props.match.params.id;
         axios.post('/articles/edit/' + id, articlePost)
             .then(response => {
                 console.log('for post: ', articlePost);
-                self.setState({posted: true, error: response.data.message});
-                this.props.history.push({
-                    pathname: '/articles',
-                    statusMessage: self.state.error
-                });
+                self.setState({ posted: true});
+                this.props.onGetError(response.data.message);
+                this.props.history.push('/articles');
             })
-            .catch(function (error){
+            .catch(function (error) {
                 console.log('Post Error: ' + error.message);
-                self.setState({posted: false, error: error.message});
+                self.setState({ posted: false});
+                self.props.onGetError(error.message);
             })
             .finally(function () { });
     }
@@ -62,39 +70,49 @@ class ArticleEdit extends Component {
     render() {
         return (
             <Layout title="Article Edit">
-                {!this.state.posted ? <Alert mode="success" msg={this.state.error} /> : null}
-                <TextInput
+                {!this.state.posted ? <Alert mode="danger" msg={this.props.err} /> : null}
+                <Input
                     htmlFor="title"
                     label="Title"
-                    inputValid={null}
-                    errorMsg={null}
-                    inputType="text" id="title" name="title"
-                    inputValue={this.state.title}
-                    changed={this.changedHandler}
+                    elementType="input"
+                    type="text" id="title" name="title"
+                    value={this.state.title}
+                    changed={this.changedTitleHandler}
                 />
-                <TextInput
+                <Input
                     htmlFor="body"
                     label="Body"
-                    inputValid={false}
-                    errorMsg={false}
-                    inputType="text" id="body" name="body"
-                    inputValue={this.state.body}
-                    changed={this.changedHandler}
+                    elementType="input"
+                    type="text" id="body" name="body"
+                    value={this.state.body}
+                    changed={this.changedBodyHandler}
                 />
-                <label>Tags</label>
+                <Input
+                    htmlfor="Tags"
+                    label="Tags"
+                    elementType="select" id="tags" name="tags"
+                    changed={this.changedSelectHandler}
+                    options={this.state.tags}
+                />
                 <div className="form-group">
-                    <select multiple className="form-control" id="tags" name="tags">
-                        {this.state.tags && Array.isArray(this.state.tags) && this.state.tags.map((tag, key) => {
-                            return <option key={key}>{tag.title}</option>
-                        })}
-                    </select>
-                </div>
-                <div className="form-group">
-                    <button className="btn btn-danger" type="button" onClick={this.onSubmitHandler}>Edit Article</button>
+                    <button className="btn btn-danger" type="button" onClick={this.onSubmitHandler.bind(this)}>Edit Article</button>
                 </div>
             </Layout>
         );
     }
 }
 
-export default ArticleEdit;
+const mapStateToProps = state => {
+    console.log('Redux State: ', state.resError);
+    return {
+        err: state.resError
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onGetError: (error) => dispatch({type: actionType.GET_ERROR_MESSAGE, error: error})
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ArticleEdit);
