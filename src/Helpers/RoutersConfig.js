@@ -1,15 +1,15 @@
 
 export const sideList = [
-    {link: '/login', label: 'Login', id: '1'},
-    {link: '/signup', label: 'SignUp', id: '2'},
-    {link: '/articles', label: 'Articles', id: '3'},
-    {link: '/users', label: 'Users', id: '4'},
-    {link: '/tags', label: 'Tags', id: '5'},
+    { link: '/login', label: 'Login', id: '1' },
+    { link: '/signup', label: 'SignUp', id: '2' },
+    { link: '/articles', label: 'Articles', id: '3' },
+    { link: '/users', label: 'Users', id: '4' },
+    { link: '/tags', label: 'Tags', id: '5' },
 ];
 
 export const slArticlesHeaders = [
-    {label: 'Title', key: 'title'},
-    {label: 'Created', key: 'created'},
+    { label: 'Title', key: 'title' },
+    { label: 'Created', key: 'created' },
 ];
 
 export const slUserHeaders = [
@@ -32,3 +32,11 @@ export const formatDate = (date) => {
     if (day.length < 2) day = '0' + day;
     return [day, month, year].join('/');
 }
+
+export const renameKey = (object, key, newKey) => {
+    const clonedObj = Object.assign({}, object);
+    const targetKey = clonedObj[key];
+    delete clonedObj[key];
+    clonedObj[newKey] = targetKey;
+    return clonedObj;
+};

@@ -48,11 +48,11 @@ class Articles extends Component {
     }
 
     render() {
-        let smartlist = null;
+        let articles = null;
         if (this.state.loading) {
-            smartlist = <Spinner />
+            articles = <Spinner />
         } else {
-            smartlist = (
+            articles = (
                 <SmartList
                     smartListHeaders={slArticlesHeaders}
                     smartListContents={this.state.articles}
@@ -72,8 +72,8 @@ class Articles extends Component {
                     </div>
                     <div className="col-sm-8">
                         <Header header="Articles" />
-                        {this.props.err ? <Alert mode="success" msg={this.props.err} /> : null}
-                        {smartlist}
+                        {this.props.articleResponseMessage ? <Alert mode="success" msg={this.props.articleResponseMessage} /> : null}
+                        {articles}
                     </div>
                 </div>
             </div>
@@ -83,7 +83,7 @@ class Articles extends Component {
 
 const mapStateToProps = state =>{
     return {
-        err: state.resError
+        articleResponseMessage: state.responseMessage
     }
 }
 

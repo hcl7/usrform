@@ -8,6 +8,7 @@ import UserView from './Views/UserView';
 import Tags from './Components/Tags';
 import Navigation from './Views/Navigation';
 import TagView from './Views/TagView';
+import TagEdit from './Views/TagEdit';
 import UserEdit from './Views/UserEdit';
 import ArticleEdit from './Views/ArticleEdit';
 
@@ -32,6 +33,7 @@ class App extends React.Component {
                         <Route path='/users/edit/:id' component={UserEdit} />
                         <Route path='/tags' exact component={Tags} />
                         <Route path='/tags/view/:id' component={TagView} />
+                        <Route path='/tags/edit/:id' component={TagEdit} />
                     </Switch>
                 </main>
             </Router>

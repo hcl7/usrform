@@ -3,6 +3,8 @@ import Layout from '../hoc/Layout';
 import Input from '../Components/Input';
 import axios from '../hoc/axios-baseurl';
 import Alert from '../Helpers/Alert';
+import { connect } from 'react-redux';
+import * as actionType from '../store/actions';
 
 class UserEdit extends Component {
     state = {
@@ -12,7 +14,6 @@ class UserEdit extends Component {
         formValid: false,
         errorMsg: {},
         posted: true,
-        error: []
     }
 
     validateForm = () => {
@@ -82,16 +83,14 @@ class UserEdit extends Component {
         let id = this.props.match.params.id;
         axios.post('/users/edit/' + id, userPost)
             .then(response => {
-                console.log('post:', response.data.message);
-                self.setState({posted: true, error: response.data.message});
-                this.props.history.push({
-                    pathname: '/users/',
-                    statusMessage: this.state.error
-                });
+                console.log('User posted: ', userPost);
+                self.setState({posted: true});
+                this.props.onGetError(response.data.message);
+                this.props.history.push('/users');
             })
             .catch(function (error){
-                console.log('Post Error: ' + error.message);
-                self.setState({posted: false, error: error.message});
+                self.setState({posted: false});
+                self.props.onGetError(error.message);
             })
             .finally(function () { });
     }
@@ -99,7 +98,7 @@ class UserEdit extends Component {
     render() {
         return (
             <Layout title="User Edit">
-                {!this.state.posted ? <Alert mode="success" msg={this.state.error} /> : null}
+                {!this.state.posted ? <Alert mode="danger" msg={this.props.userResponseMessage} /> : null}
                 <Input
                     htmlFor="email"
                     label="Email"
@@ -128,4 +127,17 @@ class UserEdit extends Component {
     }
 }
 
-export default UserEdit;
+const mapStateToProps = state =>{
+    console.log('User Redux State');
+    return{
+        userResponseMessage: state.responseMessage
+    }
+}
+
+const mapDispatchToProps = dispatch =>{
+    return{
+        onGetError: (error) => dispatch({type: actionType.POST_RESPONSE_MESSAGE, error: error})
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserEdit);

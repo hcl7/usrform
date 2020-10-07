@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
-import {sideList, slTagHeaders, formatDate} from '../Helpers/RoutersConfig';
+import { sideList, slTagHeaders, formatDate } from '../Helpers/RoutersConfig';
 import Navigation from '../Views/Navigation';
 import SideBar from '../Views/Sidebar';
 import Header from '../Components/Header';
 import SmartList from '../hoc/SmartList';
 import axios from '../hoc/axios-baseurl';
-
+import { connect } from 'react-redux';
+import * as actionType from '../store/actions';
+import Spinner from '../Helpers/Spinner';
+import Alert from '../Helpers/Alert';
 
 class Tags extends Component {
     state = {
-        tags: []
+        tags: [],
+        loading: true
     }
 
     loadTagsHandler = () => {
@@ -25,19 +29,40 @@ class Tags extends Component {
                         ...tag
                     }
                 });
-                self.setState({tags: updateTags});
+                self.setState({ tags: updateTags, loading: false });
             })
             .catch(function (error) {
                 console.log('Get Tags Error: ' + error.message);
             })
-            .finally(function (){});
+            .finally(function () { });
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.loadTagsHandler();
     }
 
     render() {
+        let tags = null;
+        if (this.state.loading) {
+            tags = <Spinner />
+        }
+        else {
+            tags = (
+                <SmartList
+                    smartListHeaders={slTagHeaders}
+                    smartListContents={this.state.tags}
+                    view={'/tags/view'}
+                    edit={'/tags/edit'}
+                    delete={'/tags/delete'}
+                    where="id"
+                />
+            );
+        }
+        if (this.props.tagResponseMessage){
+            setTimeout(function(){
+                this.props.clearState();
+           }.bind(this),3000); 
+        }
         return (
             <div className="container">
                 <Navigation />
@@ -47,14 +72,8 @@ class Tags extends Component {
                     </div>
                     <div className="col-sm-8">
                         <Header header="Tags" />
-                        <SmartList
-                            smartListHeaders={slTagHeaders}
-                            smartListContents={this.state.tags}
-                            view={'/tags/view'}
-                            edit={'/tags/edit'}
-                            delete={'/tags/delete'}
-                            where="id"
-                        />
+                        {this.props.tagResponseMessage ? <Alert mode="success" msg={this.props.tagResponseMessage} /> : null}
+                        {tags}
                     </div>
                 </div>
             </div>
@@ -62,4 +81,16 @@ class Tags extends Component {
     }
 }
 
-export default Tags;
+const mapStateToProps = state => {
+    return {
+        tagResponseMessage: state.responseMessage
+    }
+}
+
+const mapDispatchToProps = dispatch =>{
+    return {
+        clearState: () => dispatch({type: actionType.CLEAR_REDUX_STATE})
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Tags);

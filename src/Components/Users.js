@@ -7,6 +7,7 @@ import SmartList from '../hoc/SmartList';
 import Navigation from '../Views/Navigation';
 import Alert from '../Helpers/Alert';
 import Spinner from '../Helpers/Spinner';
+import { connect } from 'react-redux';
 
 class Users extends Component {
 
@@ -68,7 +69,7 @@ class Users extends Component {
                     </div>
                     <div className="col-sm-8">
                         <Header header="Users" />
-                        {this.props.location.statusMessage ? <Alert mode="success" msg={this.props.location.statusMessage} /> : null}
+                        {this.props.userResponseMessage? <Alert mode="success" msg={this.props.userResponseMessage} /> : null}
                         {spinner}
                     </div>
                 </div>
@@ -78,4 +79,10 @@ class Users extends Component {
 
 }
 
-export default Users;
+const mapStateToProps = state =>{
+    return {
+        userResponseMessage: state.responseMessage
+    }
+}
+
+export default connect(mapStateToProps)(Users);

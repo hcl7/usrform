@@ -1,16 +1,19 @@
 import * as actionType from './actions';
 
 const initialState = {
-    resError: ''
+    responseMessage: ''
 };
 
 const reducer = ( state = initialState, action) => {
     switch(action.type){
-        case actionType.GET_ERROR_MESSAGE:
+        case actionType.POST_RESPONSE_MESSAGE:
             const error = action.error;
             return {
-                //...state,
-                resError: error
+                responseMessage: error
+            }
+        case actionType.CLEAR_REDUX_STATE:
+            return {
+                responseMessage: null
             }
         default:
             return state;

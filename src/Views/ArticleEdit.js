@@ -54,7 +54,7 @@ class ArticleEdit extends Component {
         let id = this.props.match.params.id;
         axios.post('/articles/edit/' + id, articlePost)
             .then(response => {
-                console.log('for post: ', articlePost);
+                console.log('Article posted: ', articlePost);
                 self.setState({ posted: true});
                 this.props.onGetError(response.data.message);
                 this.props.history.push('/articles');
@@ -70,7 +70,7 @@ class ArticleEdit extends Component {
     render() {
         return (
             <Layout title="Article Edit">
-                {!this.state.posted ? <Alert mode="danger" msg={this.props.err} /> : null}
+                {!this.state.posted ? <Alert mode="danger" msg={this.props.articleResponseMessage} /> : null}
                 <Input
                     htmlFor="title"
                     label="Title"
@@ -103,15 +103,15 @@ class ArticleEdit extends Component {
 }
 
 const mapStateToProps = state => {
-    console.log('Redux State: ', state.resError);
+    console.log('Article Redux State: ');
     return {
-        err: state.resError
+        articleResponseMessage: state.responseMessage
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onGetError: (error) => dispatch({type: actionType.GET_ERROR_MESSAGE, error: error})
+        onGetError: (error) => dispatch({type: actionType.POST_RESPONSE_MESSAGE, error: error})
     }
 }
 

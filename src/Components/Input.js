@@ -26,7 +26,7 @@ const textInput = (props) => {
                 <select
                     className="form-control"
                     value={props.value}
-                    onChange={props.changed}>
+                    onChange={props.changed} multiple={props.multiple}>
                     {props.options.map((option, key) => (
                         <option key={key} value={option.title}>{option.title}</option>
                     ))}
