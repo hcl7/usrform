@@ -9,9 +9,10 @@ import { connect } from 'react-redux';
 import * as actionType from '../store/actions';
 import Spinner from '../Helpers/Spinner';
 import Alert from '../Helpers/Alert';
-import ModalDelete from '../Components/Modal/ModalDelete';
+import swal from 'sweetalert';
 
 class Tags extends Component {
+
     state = {
         tags: [],
         loading: true
@@ -49,6 +50,22 @@ class Tags extends Component {
 
     onDeleteHandler = (id) => {
         console.log(id);
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this Tag!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+          })
+          .then((willDelete) => {
+            if (willDelete) {
+              swal("Your Tag has been deleted!", {
+                icon: "success",
+              });
+            } else {
+              swal("Your Tag is safe!");
+            }
+          });
     }
 
     render() {
@@ -77,7 +94,6 @@ class Tags extends Component {
                     </div>
                     <div className="col-sm-8">
                         <Header header="Tags" />
-                        {/* <ModalDelete title="Tag Delete" body={this.props.location.pathname} /> */}
                         {this.props.tagResponseMessage ? <Alert mode="success" msg={this.props.tagResponseMessage} /> : null}
                         {tags}
                     </div>
