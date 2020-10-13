@@ -8,6 +8,7 @@ import Navigation from '../Views/Navigation';
 import Alert from '../Helpers/Alert';
 import Spinner from '../Helpers/Spinner';
 import { connect } from 'react-redux';
+import * as actionType from '../store/actions';
 
 class Users extends Component {
 
@@ -41,6 +42,15 @@ class Users extends Component {
 
     componentDidMount() {
         this.loadUsersHandler();
+        if (this.props.userResponseMessage){
+            setTimeout(function(){
+                this.props.clearState();
+           }.bind(this),3000); 
+        }
+    }
+
+    onDeleteHandler = (id) => {
+        console.log(id);
     }
 
     render() {
@@ -55,7 +65,7 @@ class Users extends Component {
                     smartListContents={this.state.users}
                     view={'/users/view'}
                     edit={'/users/edit'}
-                    delete={'/users/delete'}
+                    clicked={this.onDeleteHandler.bind(this)}
                     where="id"
                 />
             );
@@ -85,4 +95,10 @@ const mapStateToProps = state =>{
     }
 }
 
-export default connect(mapStateToProps)(Users);
+const mapDispatchToProps = dispatch =>{
+    return {
+        clearState: () => dispatch({type: actionType.CLEAR_REDUX_STATE})
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Users);

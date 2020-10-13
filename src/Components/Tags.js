@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import * as actionType from '../store/actions';
 import Spinner from '../Helpers/Spinner';
 import Alert from '../Helpers/Alert';
+import ModalDelete from '../Components/Modal/ModalDelete';
 
 class Tags extends Component {
     state = {
@@ -39,6 +40,15 @@ class Tags extends Component {
 
     componentDidMount() {
         this.loadTagsHandler();
+        if (this.props.tagResponseMessage){
+            setTimeout(function(){
+                this.props.clearState();
+           }.bind(this),3000); 
+        }
+    }
+
+    onDeleteHandler = (id) => {
+        console.log(id);
     }
 
     render() {
@@ -53,15 +63,10 @@ class Tags extends Component {
                     smartListContents={this.state.tags}
                     view={'/tags/view'}
                     edit={'/tags/edit'}
-                    delete={'/tags/delete'}
+                    clicked={this.onDeleteHandler.bind(this)}
                     where="id"
                 />
             );
-        }
-        if (this.props.tagResponseMessage){
-            setTimeout(function(){
-                this.props.clearState();
-           }.bind(this),3000); 
         }
         return (
             <div className="container">
@@ -72,6 +77,7 @@ class Tags extends Component {
                     </div>
                     <div className="col-sm-8">
                         <Header header="Tags" />
+                        {/* <ModalDelete title="Tag Delete" body={this.props.location.pathname} /> */}
                         {this.props.tagResponseMessage ? <Alert mode="success" msg={this.props.tagResponseMessage} /> : null}
                         {tags}
                     </div>

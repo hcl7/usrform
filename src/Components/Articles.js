@@ -8,6 +8,7 @@ import Navigation from '../Views/Navigation';
 import Alert from '../Helpers/Alert';
 import Spinner from '../Helpers/Spinner';
 import { connect } from 'react-redux';
+import * as actionType from '../store/actions';
 
 class Articles extends Component {
     
@@ -45,6 +46,15 @@ class Articles extends Component {
 
     componentDidMount() {
         this.loadArticlesHandler();
+        if (this.props.articleResponseMessage){
+            setTimeout(function(){
+                this.props.clearState();
+            }.bind(this), 3000);
+        }
+    }
+
+    onDeleteHandler = (id) => {
+        console.log(id);
     }
 
     render() {
@@ -58,7 +68,7 @@ class Articles extends Component {
                     smartListContents={this.state.articles}
                     view={'/articles/view'}
                     edit={'/articles/edit'}
-                    delete={'/articles/delete'}
+                    clicked={this.onDeleteHandler.bind(this)}
                     where="id"
                 />
             );
@@ -87,4 +97,10 @@ const mapStateToProps = state =>{
     }
 }
 
-export default connect(mapStateToProps)(Articles);
+const mapDispatchToProps = dispatch =>{
+    return{
+        clearState: () => dispatch({type: actionType.CLEAR_REDUX_STATE})
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Articles);
