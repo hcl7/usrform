@@ -9,12 +9,14 @@ import Alert from '../Helpers/Alert';
 import Spinner from '../Helpers/Spinner';
 import { connect } from 'react-redux';
 import * as actionType from '../store/actions';
+import swal from 'sweetalert';
 
 class Articles extends Component {
     
     state = {
         articles: [],
-        loading: true
+        loading: true,
+        error: ''
     }
 
     parentFunction = (d) =>{
@@ -54,7 +56,43 @@ class Articles extends Component {
     }
 
     onDeleteHandler = (id) => {
+        const self = this;
         console.log(id);
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this Article!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                axios.post('/articles/delete/' + id)
+                    .then(function (response) {
+                        self.setState({ error: response.data.message });
+                        swal(self.state.error, {
+                            icon: "success",
+                            text: response.data.message
+                        });
+                        self.loadArticlesHandler();
+                    })
+                    .catch(function (error) {
+                        console.log(error.message);
+                        self.setState({ error: error.message });
+                        swal(self.state.error, {
+                            icon: "error",
+                            text: error.message
+                        });
+                    })
+                    .finally(function () { }
+                );
+            }
+            else {
+                swal("Your Article is Safe!", {
+                    icon: "info"
+                });
+            }
+        });
     }
 
     render() {

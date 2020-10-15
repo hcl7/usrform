@@ -43,10 +43,10 @@ class Tags extends Component {
 
     componentDidMount() {
         this.loadTagsHandler();
-        if (this.props.tagResponseMessage) {
-            setTimeout(function () {
+        if (this.props.tagResponseMessage){
+            setTimeout(function(){
                 this.props.clearState();
-            }.bind(this), 3000);
+           }.bind(this),3000); 
         }
     }
 
@@ -64,21 +64,21 @@ class Tags extends Component {
             if (willDelete) {
                 axios.delete('/tags/delete/' + id)
                     .then(function (response) {
-                        self.setState({ deleted: true, error: response.data.message });
+                        self.setState({ error: response.data.message });
+                        swal(self.state.error, {
+                            icon: "success",
+                            text: response.data.message
+                        });
+                        self.loadTagsHandler();
                     })
                     .catch(function (error) {
-                        self.setState({ deleted: false, error: error.message });
+                        self.setState({ error: error.message });
+                        swal(self.state.error, {
+                            icon: "error",
+                            text: error.message
+                        });
                     })
                     .finally(function () { });
-                if (self.state.deleted) {
-                    swal(self.state.error, {
-                        icon: "success",
-                    });
-                } else {
-                    swal(self.state.error, {
-                        icon: "error",
-                    });
-                }
             }
             else {
                 swal("Your Tag is Safe!", {
@@ -129,9 +129,9 @@ const mapStateToProps = state => {
     }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = dispatch =>{
     return {
-        clearState: () => dispatch({ type: actionType.CLEAR_REDUX_STATE })
+        clearState: () => dispatch({type: actionType.CLEAR_REDUX_STATE})
     }
 }
 

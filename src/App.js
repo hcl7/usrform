@@ -11,6 +11,7 @@ import TagView from './Views/TagView';
 import TagEdit from './Views/TagEdit';
 import UserEdit from './Views/UserEdit';
 import ArticleEdit from './Views/ArticleEdit';
+import Article from './Views/Article';
 
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
@@ -26,6 +27,7 @@ class App extends React.Component {
                         <Route path='/articles' exact component={Articles} />
                         <Route path='/articles/view/:id' component={ArticleView} />
                         <Route path='/articles/edit/:id' component={ArticleEdit} />
+                        <Route path='/articles/add' component={Article} />
                         <Route path="/signup" component={SignupForm} />
                         <Route path='/login' component={LoginForm} />
                         <Route path='/users' exact component={Users} />

@@ -6,6 +6,9 @@ import SideBar from '../Views/Sidebar';
 import axios from '../hoc/axios-baseurl';
 import { sideList} from '../Helpers/RoutersConfig';
 import Navigation from '../Views/Navigation';
+import { connect } from 'react-redux';
+import * as actionType from '../store/actions';
+import Alert from '../Helpers/Alert';
 
 class SignupForm extends React.Component {
   
@@ -14,7 +17,9 @@ class SignupForm extends React.Component {
     password: '', passValid: false,
     cfpassword: '', cfpassValid: false,
     formValid: false,
-    errorMsg: {}
+    errorMsg: {},
+    error: '',
+    posted: true
   }
 
   validateForm = () => {
@@ -88,11 +93,15 @@ class SignupForm extends React.Component {
     console.log("state: ", this.state);
     axios.post('/users/signup', this.state)
       .then(function (response) {
-          //self.setState({ errorMsg: response.data.message });
-          console.log('success: ', response);
+          self.setState({ posted: true });
+          self.props.onGetError(response.data.message);
+          self.props.history.push('/users');
+          console.log('success: ', response.data.message);
       })
       .catch(function (error) {
-        console.log('Post Error: ' + error.message);
+          self.setState({ posted: false });
+          self.props.onGetError(error.message);
+          console.log('Post Error: ' + error.message);
       })
       .finally(function () {});
   }
@@ -109,6 +118,7 @@ class SignupForm extends React.Component {
           </div>
           <div className="col-sm-8">
             <Header header="Signup" />
+            {!this.state.posted ? <Alert mode="danger" msg={this.props.signupResponseMessage} /> : null}
             <form action="#" id="js-form">
               <Input
                 htmlFor="emial"
@@ -156,4 +166,17 @@ class SignupForm extends React.Component {
   }
 }
 
-export default SignupForm;
+const mapStateToProps = state =>{
+  console.log('User Redux State');
+  return{
+      signupResponseMessage: state.responseMessage
+  }
+}
+
+const mapDispatchToProps = dispatch =>{
+  return{
+      onGetError: (error) => dispatch({type: actionType.POST_RESPONSE_MESSAGE, error: error})
+  }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(SignupForm);

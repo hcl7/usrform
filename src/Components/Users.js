@@ -43,10 +43,10 @@ class Users extends Component {
 
     componentDidMount() {
         this.loadUsersHandler();
-        if (this.props.userResponseMessage){
-            setTimeout(function(){
+        if (this.props.userResponseMessage) {
+            setTimeout(function () {
                 this.props.clearState();
-           }.bind(this),3000); 
+            }.bind(this), 3000);
         }
     }
 
@@ -62,23 +62,25 @@ class Users extends Component {
         })
         .then((willDelete) => {
             if (willDelete) {
-                axios.delete('/users/delete/' + id)
+                axios.post('/users/delete/' + id)
                     .then(function (response) {
-                        self.setState({ deleted: true, error: response.data.message });
+                        self.setState({ error: response.data.message });
+                        swal(self.state.error, {
+                            icon: "success",
+                            text: response.data.message
+                        });
+                        self.loadUsersHandler();
                     })
                     .catch(function (error) {
-                        self.setState({ deleted: false, error: error.message });
+                        console.log(error.message);
+                        self.setState({ error: error.message });
+                        swal(self.state.error, {
+                            icon: "error",
+                            text: error.message
+                        });
                     })
-                    .finally(function () { });
-                if (self.state.deleted) {
-                    swal(self.state.error, {
-                        icon: "success",
-                    });
-                } else {
-                    swal(self.state.error, {
-                        icon: "error",
-                    });
-                }
+                    .finally(function () { }
+                );
             }
             else {
                 swal("Your User is Safe!", {
@@ -89,12 +91,12 @@ class Users extends Component {
     }
 
     render() {
-        let spinner = null;
+        let users = null;
         if (this.state.loading) {
-            spinner = <Spinner />;
+            users = <Spinner />;
         }
         else {
-            spinner = (
+            users = (
                 <SmartList
                     smartListHeaders={slUserHeaders}
                     smartListContents={this.state.users}
@@ -114,8 +116,8 @@ class Users extends Component {
                     </div>
                     <div className="col-sm-8">
                         <Header header="Users" />
-                        {this.props.userResponseMessage? <Alert mode="success" msg={this.props.userResponseMessage} /> : null}
-                        {spinner}
+                        {this.props.userResponseMessage ? <Alert mode="success" msg={this.props.userResponseMessage} /> : null}
+                        {users}
                     </div>
                 </div>
             </div>
@@ -124,15 +126,15 @@ class Users extends Component {
 
 }
 
-const mapStateToProps = state =>{
+const mapStateToProps = state => {
     return {
         userResponseMessage: state.responseMessage
     }
 }
 
-const mapDispatchToProps = dispatch =>{
+const mapDispatchToProps = dispatch => {
     return {
-        clearState: () => dispatch({type: actionType.CLEAR_REDUX_STATE})
+        clearState: () => dispatch({ type: actionType.CLEAR_REDUX_STATE })
     }
 }
 

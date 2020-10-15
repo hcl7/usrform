@@ -91,6 +91,7 @@ class ArticleEdit extends Component {
                     htmlfor="Tags"
                     label="Tags"
                     elementType="select" id="tags" name="tags"
+                    multiple
                     changed={this.changedSelectHandler}
                     options={this.state.tags}
                 />

@@ -2,9 +2,11 @@
 export const sideList = [
     { link: '/login', label: 'Login', id: '1' },
     { link: '/signup', label: 'SignUp', id: '2' },
-    { link: '/articles', label: 'Articles', id: '3' },
-    { link: '/users', label: 'Users', id: '4' },
-    { link: '/tags', label: 'Tags', id: '5' },
+    { link: '/users', label: 'Users', id: '3' },
+    { link: '/articles', label: 'Articles', id: '4' },
+    { link: '/articles/add', label: 'New Article', id: '5' },
+    { link: '/tags', label: 'Tags', id: '6' },
+    { link: '/tags/add', label: 'New Tag', id: '7' },
 ];
 
 export const slArticlesHeaders = [
