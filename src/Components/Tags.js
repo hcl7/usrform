@@ -15,7 +15,9 @@ class Tags extends Component {
 
     state = {
         tags: [],
-        loading: true
+        loading: true,
+        deleted: false,
+        error: ''
     }
 
     loadTagsHandler = () => {
@@ -41,14 +43,15 @@ class Tags extends Component {
 
     componentDidMount() {
         this.loadTagsHandler();
-        if (this.props.tagResponseMessage){
-            setTimeout(function(){
+        if (this.props.tagResponseMessage) {
+            setTimeout(function () {
                 this.props.clearState();
-           }.bind(this),3000); 
+            }.bind(this), 3000);
         }
     }
 
     onDeleteHandler = (id) => {
+        const self = this;
         console.log(id);
         swal({
             title: "Are you sure?",
@@ -56,16 +59,33 @@ class Tags extends Component {
             icon: "warning",
             buttons: true,
             dangerMode: true,
-          })
-          .then((willDelete) => {
+        })
+        .then((willDelete) => {
             if (willDelete) {
-              swal("Your Tag has been deleted!", {
-                icon: "success",
-              });
-            } else {
-              swal("Your Tag is safe!");
+                axios.delete('/tags/delete/' + id)
+                    .then(function (response) {
+                        self.setState({ deleted: true, error: response.data.message });
+                    })
+                    .catch(function (error) {
+                        self.setState({ deleted: false, error: error.message });
+                    })
+                    .finally(function () { });
+                if (self.state.deleted) {
+                    swal(self.state.error, {
+                        icon: "success",
+                    });
+                } else {
+                    swal(self.state.error, {
+                        icon: "error",
+                    });
+                }
             }
-          });
+            else {
+                swal("Your Tag is Safe!", {
+                    icon: "info"
+                });
+            }
+        });
     }
 
     render() {
@@ -109,9 +129,9 @@ const mapStateToProps = state => {
     }
 }
 
-const mapDispatchToProps = dispatch =>{
+const mapDispatchToProps = dispatch => {
     return {
-        clearState: () => dispatch({type: actionType.CLEAR_REDUX_STATE})
+        clearState: () => dispatch({ type: actionType.CLEAR_REDUX_STATE })
     }
 }
 

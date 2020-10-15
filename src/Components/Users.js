@@ -9,13 +9,14 @@ import Alert from '../Helpers/Alert';
 import Spinner from '../Helpers/Spinner';
 import { connect } from 'react-redux';
 import * as actionType from '../store/actions';
+import swal from 'sweetalert';
 
 class Users extends Component {
 
     state = {
         users: [],
-        selecteUser: [],
-        loading: true
+        loading: true,
+        error: ''
     }
 
     loadUsersHandler = () => {
@@ -50,7 +51,41 @@ class Users extends Component {
     }
 
     onDeleteHandler = (id) => {
+        const self = this;
         console.log(id);
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this User!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                axios.delete('/users/delete/' + id)
+                    .then(function (response) {
+                        self.setState({ deleted: true, error: response.data.message });
+                    })
+                    .catch(function (error) {
+                        self.setState({ deleted: false, error: error.message });
+                    })
+                    .finally(function () { });
+                if (self.state.deleted) {
+                    swal(self.state.error, {
+                        icon: "success",
+                    });
+                } else {
+                    swal(self.state.error, {
+                        icon: "error",
+                    });
+                }
+            }
+            else {
+                swal("Your User is Safe!", {
+                    icon: "info"
+                });
+            }
+        });
     }
 
     render() {

@@ -84,26 +84,17 @@ class SignupForm extends React.Component {
   }
 
   onSubmitHandler = () => {
-    // Make a request for a user with a argument
-    const this_ = this;
+    const self = this;
+    console.log("state: ", this.state);
     axios.post('/users/signup', this.state)
       .then(function (response) {
-        // handle success
-        if (!response.data && response.data.error) {
-          this_.setState({ errorMsg: response.data.message });
-          console.log('Error: ' + this_.errorMsg);
-        }
-        else {
-          console.log('Success: ' + response);
-        }
+          //self.setState({ errorMsg: response.data.message });
+          console.log('success: ', response);
       })
       .catch(function (error) {
-        // handle error
         console.log('Post Error: ' + error.message);
       })
-      .finally(function () {
-        // always executed
-      });
+      .finally(function () {});
   }
 
   render() {

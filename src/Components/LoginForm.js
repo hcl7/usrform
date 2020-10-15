@@ -109,6 +109,7 @@ class LoginForm extends React.Component {
               <Input
                 htmlFor="Password"
                 label="Password"
+                placeholder="Enter Password"
                 valid={this.state.passValid}
                 message={this.state.errorMsg.password}
                 elementType="input"
