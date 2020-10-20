@@ -19,10 +19,6 @@ class Articles extends Component {
         error: ''
     }
 
-    parentFunction = (d) =>{
-        console.log(d);
-    } 
-
     loadArticlesHandler = () => {
         const self = this;
         axios.get('/articles')
@@ -69,17 +65,20 @@ class Articles extends Component {
             if (willDelete) {
                 axios.post('/articles/delete/' + id)
                     .then(function (response) {
+                        console.log('Message: ', response.data);
                         self.setState({ error: response.data.message });
-                        swal(self.state.error, {
-                            icon: "success",
-                            text: response.data.message
-                        });
+                        if(response.data.message !== ''){
+                            swal( {
+                                icon: "success",
+                                text: response.data.message
+                            });
+                        }
                         self.loadArticlesHandler();
                     })
                     .catch(function (error) {
                         console.log(error.message);
                         self.setState({ error: error.message });
-                        swal(self.state.error, {
+                        swal( {
                             icon: "error",
                             text: error.message
                         });

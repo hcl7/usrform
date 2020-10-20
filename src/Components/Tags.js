@@ -62,7 +62,7 @@ class Tags extends Component {
         })
         .then((willDelete) => {
             if (willDelete) {
-                axios.delete('/tags/delete/' + id)
+                axios.post('/tags/delete/' + id)
                     .then(function (response) {
                         self.setState({ error: response.data.message });
                         swal(self.state.error, {

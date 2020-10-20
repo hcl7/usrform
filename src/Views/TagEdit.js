@@ -58,12 +58,14 @@ class TagEdit extends Component {
             <Layout title="Tag Edit">
                 {!this.state.posted ? <Alert mode="danger" msg={this.props.tagResponseMessage} /> : null}
                 <Input 
+                    label="Tag"
                     elementType="input"
                     type="text" id="title" name="title"
                     value={this.state.title}
                     changed={this.changedTagHandler} 
                 />
                 <Input
+                    label="Articles"
                     elementType="select" 
                     multiple
                     options={this.state.articles}

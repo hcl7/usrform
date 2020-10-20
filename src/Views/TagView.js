@@ -5,6 +5,7 @@ import Navigation from '../Views/Navigation';
 import SideBar from './Sidebar';
 import Header from '../Components/Header';
 import SmartList from '../hoc/SmartList';
+import swal from 'sweetalert';
 
 class TagView extends Component {
     state = {
@@ -36,6 +37,48 @@ class TagView extends Component {
     }
     componentDidMount() {
         this.loadTagHandler(this.props.match.params.id);
+    }
+
+    onDeleteHandler = (id) => {
+        const self = this;
+        console.log(id);
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this Article!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                axios.post('/articles/delete/' + id)
+                    .then(function (response) {
+                        self.setState({ error: response.data.message });
+                        if(response.data.message){
+                            swal(response.data.message, {
+                                icon: "success",
+                                text: response.data.message
+                            });
+                        }
+                        self.loadTagHandler(self.props.match.params.id);
+                    })
+                    .catch(function (error) {
+                        console.log(error.message);
+                        self.setState({ error: error.message });
+                        swal(self.state.error, {
+                            icon: "error",
+                            text: error.message
+                        });
+                    })
+                    .finally(function () { }
+                );
+            }
+            else {
+                swal("Your Article is Safe!", {
+                    icon: "info"
+                });
+            }
+        });
     }
     
     render() {
@@ -69,7 +112,7 @@ class TagView extends Component {
                                 smartListContents={this.state.articles}
                                 view={'/articles/view'}
                                 edit={'/articles/edit'}
-                                delete={'/articles/delete'}
+                                clicked={this.onDeleteHandler.bind(this)}
                                 where="id"
                             />
                         </div>

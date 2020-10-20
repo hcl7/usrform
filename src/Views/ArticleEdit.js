@@ -12,7 +12,8 @@ class ArticleEdit extends Component {
         title: '',
         body: '',
         posted: true,
-        tags: []
+        tags: [],
+        selected: {}
     }
 
     componentDidMount() {
@@ -45,16 +46,27 @@ class ArticleEdit extends Component {
     }
 
     changedSelectHandler = (e) => {
-        this.setState({[e.target.name]: e.target.value});
+        let options = e.target.options;
+        let value = [];
+        for( let i = 0, l = options.length; i<l; i++){
+            if(options[i].selected) {
+                value.push(this.state.tags[i]);
+            }
+        }
+        this.setState({selected: value});
     }
 
     onSubmitHandler = (e) => {
         const self = this;
-        const articlePost = self.state;
+        const dataPost = {
+            title: this.state.title,
+            body: this.state.body,
+            tags: this.state.selected
+        }
+        console.log('Article posted: ', dataPost);
         let id = this.props.match.params.id;
-        axios.post('/articles/edit/' + id, articlePost)
+        axios.post('/articles/edit/' + id, dataPost)
             .then(response => {
-                console.log('Article posted: ', articlePost);
                 self.setState({ posted: true});
                 this.props.onGetError(response.data.message);
                 this.props.history.push('/articles');
@@ -68,6 +80,7 @@ class ArticleEdit extends Component {
     }
 
     render() {
+        console.log(this.state.selected);
         return (
             <Layout title="Article Edit">
                 {!this.state.posted ? <Alert mode="danger" msg={this.props.articleResponseMessage} /> : null}

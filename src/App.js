@@ -12,6 +12,7 @@ import TagEdit from './Views/TagEdit';
 import UserEdit from './Views/UserEdit';
 import ArticleEdit from './Views/ArticleEdit';
 import Article from './Views/Article';
+import Tag from './Views/Tag';
 
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
@@ -36,6 +37,7 @@ class App extends React.Component {
                         <Route path='/tags' exact component={Tags} />
                         <Route path='/tags/view/:id' component={TagView} />
                         <Route path='/tags/edit/:id' component={TagEdit} />
+                        <Route path='/tags/add/' component={Tag} />
                     </Switch>
                 </main>
             </Router>

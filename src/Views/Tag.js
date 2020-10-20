@@ -1,30 +1,30 @@
-import React, {Component} from 'react';
-import Input from '../Components/Input';
-import Layout from '../hoc/Layout';
+import React, { Component } from 'react';
 import axios from '../hoc/axios-baseurl';
+import Layout from '../hoc/Layout';
+import Input from '../Components/Input';
 import Alert from '../Helpers/Alert';
 import * as actionType from '../store/actions';
 import { connect } from 'react-redux';
 
-class Article extends Component {
+class Tag extends Component {
+
     state = {
         title: '',
-        body: '',
-        tags: [],
-        selectedTags: [],
+        articles: [],
+        selectedArticles: [],
         posted: true
     }
 
     componentDidMount(){
-        this.loadTagsHandler();
+        this.loadArticlesHandler();
     }
 
-    loadTagsHandler = () => {
+    loadArticlesHandler = () => {
         const self = this;
-        axios.get('/tags')
+        axios.get('/articles')
             .then(function (response) {
-                console.log('Tags: ', response.data);
-                self.setState({tags: response.data});
+                console.log('Articles: ', response.data);
+                self.setState({articles: response.data});
             })
             .catch(function (error){
                 console.log(error.message);
@@ -37,48 +37,43 @@ class Article extends Component {
         this.setState({title: e.target.value});
     }
 
-    changedBodyHandler = (e) => {
-        this.setState({body: e.target.value});
-    }
-
     changedSelectHandler = (e) => {
         let options = e.target.options;
         let value = [];
         for( let i = 0, l = options.length; i<l; i++){
             if(options[i].selected) {
-                value.push(this.state.tags[i]);
+                value.push(this.state.articles[i]);
             }
         }
-        this.setState({selectedTags: value});
+        this.setState({selectedArticles: value});
     }
 
     onSubmitHandler = () => {
         const self = this;
         let data = {
             title: this.state.title,
-            body: this.state.body,
-            tags: this.state.selectedTags
+            articles: this.state.selectedArticles
         };
-        axios.post('/articles/add', data)
+        axios.post('/tags/add', data)
             .then(function (response) {
                 console.log(response.data);
                 self.setState({posted: true});
                 self.props.onGetError(response.data.message);
-                self.props.history.push('/articles');
+                self.props.history.push('/tags');
             })
             .catch(function (error){
                 console.log(error.message);
                 self.setState({posted: false});
-                self.props.onGetError(error.message);
             })
             .finally(function () {}
         );
     }
 
-    render () {
-        return (
-            <Layout title="New Article">
-                {!this.state.posted ? <Alert mode="success" msg={this.props.articleResponseMessage} /> : null}
+    render() {
+        console.log('selected: ', this.state.title);
+        return(
+            <Layout title="New Tag">
+                {!this.state.posted ? <Alert mode="danger" msg={this.props.tagResponseMessage} /> : null}
                 <Input
                     htmlFor="title"
                     label="Title"
@@ -88,32 +83,24 @@ class Article extends Component {
                     changed={this.changedTitleHandler}
                 />
                 <Input
-                    htmlFor="body"
-                    label="Body"
-                    elementType="input"
-                    type="text" id="body" name="body"
-                    value={this.state.body}
-                    changed={this.changedBodyHandler}
-                />
-                <Input
-                    htmlFor="tags"
-                    label="Tags"
+                    htmlFor="articles"
+                    label="Articles"
                     elementType="select"
                     multiple
-                    options={this.state.tags}
+                    options={this.state.articles}
                     changed={this.changedSelectHandler} />
                 
                 <div className="form-group">
-                    <button className="btn btn-primary" type="button" onClick={this.onSubmitHandler}>Add Article</button>
+                    <button className="btn btn-primary" type="button" onClick={this.onSubmitHandler}>Add Tag</button>
                 </div>
             </Layout>
         );
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = state =>{
     return {
-        articleResponseMessage: state.responseMessage
+        tagResponseMessage: state.responseMessage
     }
 }
 
@@ -122,5 +109,4 @@ const mapDispatchToProps = dispatch => {
         onGetError: (error) => dispatch({type: actionType.POST_RESPONSE_MESSAGE, error: error})
     }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(Article);
+export default connect(mapStateToProps, mapDispatchToProps)(Tag);

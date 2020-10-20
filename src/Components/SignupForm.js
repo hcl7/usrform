@@ -56,15 +56,15 @@ class SignupForm extends React.Component {
     let cfpassValid = true;
     let errorMsg = { ...this.state.errorMsg };
 
-    if (this.state.password !== this.state.cfpassword) {
-      cfpassValid = false;
-      errorMsg.cfpassword = "Passwords not equal!";
-    }
-
     // cfpass validate regex;
     if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,32}$/.test(cfpassword)) {
       cfpassValid = false;
       errorMsg.cfpassword = "Password must have Capital Letter, 8 chars minimum, Numbers and Chars!";
+    }
+
+    if (this.state.password !== cfpassword) {
+      cfpassValid = false;
+      errorMsg.cfpassword = "Passwords not equal!";
     }
 
     this.setState({ cfpassValid, errorMsg }, this.validateForm);
@@ -143,8 +143,8 @@ class SignupForm extends React.Component {
               <Input
                 htmlFor="cfpassword"
                 label="Confirm Password"
-                valid={this.state.passValid}
-                message={this.state.errorMsg.password}
+                valid={this.state.cfpassValid}
+                message={this.state.errorMsg.cfpassword}
                 elementType="input"
                 type="password" id="cfpassword" name="cfpassword"
                 value={this.state.cfpassword}

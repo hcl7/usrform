@@ -5,6 +5,7 @@ import SideBar from '../Views/Sidebar';
 import Header from '../Components/Header';
 import { sideList, formatDate, slArticlesHeaders } from '../Helpers/RoutersConfig';
 import SmartList from '../hoc/SmartList';
+import swal from 'sweetalert';
 
 
 class UserView extends Component {
@@ -40,6 +41,48 @@ class UserView extends Component {
         this.loadUserHandler(this.props.match.params.id);
     }
 
+    onDeleteHandler = (id) => {
+        const self = this;
+        console.log(id);
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this Article!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                axios.post('/articles/delete/' + id)
+                    .then(function (response) {
+                        self.setState({ error: response.data.message });
+                        if(response.data.message){
+                            swal(response.data.message, {
+                                icon: "success",
+                                text: response.data.message
+                            });
+                        }
+                        self.loadUserHandler(self.props.match.params.id);
+                    })
+                    .catch(function (error) {
+                        console.log(error.message);
+                        self.setState({ error: error.message });
+                        swal(self.state.error, {
+                            icon: "error",
+                            text: error.message
+                        });
+                    })
+                    .finally(function () { }
+                );
+            }
+            else {
+                swal("Your Article is Safe!", {
+                    icon: "info"
+                });
+            }
+        });
+    }
+
     render() {
         return (
             <div className="container">
@@ -62,13 +105,15 @@ class UserView extends Component {
                                 <p><small><i>{this.state.user.id}</i></small></p>
                             </div>
                         </div>
+                        <Header header="Articles Related" />  
                         <div className="media border p-3">
+                              
                             <SmartList
                                 smartListHeaders={slArticlesHeaders}
                                 smartListContents={this.state.articles}
                                 view={'/articles/view'}
                                 edit={'/articles/edit'}
-                                delete={'/articles/delete'}
+                                clicked={this.onDeleteHandler.bind(this)}
                                 where="id"
                             />
                         </div>
