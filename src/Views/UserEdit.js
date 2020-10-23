@@ -4,7 +4,7 @@ import Input from '../Components/Input';
 import axios from '../hoc/axios-baseurl';
 import Alert from '../Helpers/Alert';
 import { connect } from 'react-redux';
-import * as actionType from '../store/actions';
+import * as actionCreators from '../store/actions';
 
 class UserEdit extends Component {
     state = {
@@ -136,7 +136,7 @@ const mapStateToProps = state =>{
 
 const mapDispatchToProps = dispatch =>{
     return{
-        onGetError: (error) => dispatch({type: actionType.POST_RESPONSE_MESSAGE, error: error})
+        onGetError: (error) => dispatch(actionCreators.getErrorMessage(error))
     }
 }
 

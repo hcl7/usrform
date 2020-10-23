@@ -8,7 +8,7 @@ import Navigation from '../Views/Navigation';
 import Alert from '../Helpers/Alert';
 import Spinner from '../Helpers/Spinner';
 import { connect } from 'react-redux';
-import * as actionType from '../store/actions';
+import * as actionCreator from '../store/actions';
 import swal from 'sweetalert';
 
 class Users extends Component {
@@ -134,7 +134,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        clearState: () => dispatch({ type: actionType.CLEAR_REDUX_STATE })
+        clearState: () => dispatch(actionCreator.clearState())
     }
 }
 
