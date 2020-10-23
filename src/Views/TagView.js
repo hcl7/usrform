@@ -9,7 +9,7 @@ import swal from 'sweetalert';
 
 class TagView extends Component {
     state = {
-        tags: [],
+        tag: [],
         articles: []
     }
 
@@ -17,10 +17,10 @@ class TagView extends Component {
         const self = this;
         axios.get('/tags/view/' + id)
             .then(function (response) {
-                const tags = response.data;
-                console.log(tags);
-                const articles = tags.articles;
-                self.setState({tags: tags});
+                const tag = response.data.tag;
+                console.log('tag: ', tag.title);
+                const articles = tag.articles;
+                self.setState({tag: tag});
                 const updateArticle = articles.map(article => {
                     article.created = formatDate(article.created);
                     article.modified = formatDate(article.modified);
@@ -99,10 +99,10 @@ class TagView extends Component {
                                 <p>Modified</p>
                             </div>
                             <div className="media-body">
-                                <p><small><i>{this.state.tags.title}</i></small></p>
-                                <p><small><i>{this.state.tags.id}</i></small></p>
-                                <p><small><i>{formatDate(this.state.tags.created)}</i></small></p>
-                                <p><small><i>{formatDate(this.state.tags.modified)}</i></small></p>
+                                <p><small><i>{this.state.tag.title}</i></small></p>
+                                <p><small><i>{this.state.tag.id}</i></small></p>
+                                <p><small><i>{formatDate(this.state.tag.created)}</i></small></p>
+                                <p><small><i>{formatDate(this.state.tag.modified)}</i></small></p>
                             </div>
                         </div>
                         <Header header="Articles Related" />

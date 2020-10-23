@@ -56,7 +56,7 @@ class Tag extends Component {
         };
         axios.post('/tags/add', data)
             .then(function (response) {
-                console.log(response.data);
+                console.log("posted: ", data);
                 self.setState({posted: true});
                 self.props.onGetError(response.data.message);
                 self.props.history.push('/tags');

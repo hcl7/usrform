@@ -13,7 +13,8 @@ class ArticleEdit extends Component {
         body: '',
         posted: true,
         tags: [],
-        selected: {}
+        selected: [],
+        tagsArticle: []
     }
 
     componentDidMount() {
@@ -26,9 +27,9 @@ class ArticleEdit extends Component {
         axios.get('/articles/view/' + id)
             .then(function (response) {
                 console.log('Artcle data: ', response.data);
-                const article = response.data;
+                const article = response.data.article;
                 const tags = response.data.tags;
-                self.setState({ title: article.title, body: article.body, tags: tags });
+                self.setState({ title: article.title, body: article.body, tags: tags, tagsArticle: article.tags.map(sa=>sa.id)});
 
             })
             .catch(function (error) {
@@ -107,6 +108,7 @@ class ArticleEdit extends Component {
                     multiple
                     changed={this.changedSelectHandler}
                     options={this.state.tags}
+                    selected={this.state.tagsArticle} // [1,3]
                 />
                 <div className="form-group">
                     <button className="btn btn-danger" type="button" onClick={this.onSubmitHandler.bind(this)}>Edit Article</button>

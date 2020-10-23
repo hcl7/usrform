@@ -10,10 +10,12 @@ class TagEdit extends Component {
     state = {
         title: '',
         articles: [],
-        posted: true
+        posted: true,
+        selectedArticles: {},
+        articlesTag: []
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.loadTagHandler();
     }
 
@@ -21,54 +23,71 @@ class TagEdit extends Component {
         this.setState({ title: e.target.value });
     }
 
+    changedSelectedArticlesHandler = (e) => {
+        let options = e.target.options;
+        let value = [];
+        for (let i = 0, l = options.length; i < l; i++) {
+            if (options[i].selected) {
+                value.push(this.state.articles[i]);
+            }
+        }
+        this.setState({ selectedArticles: value });
+    }
+
     loadTagHandler = () => {
         const self = this;
         let id = this.props.match.params.id;
         axios.get('/tags/view/' + id)
-            .then(function (response){
-                console.log("tag: ", response.data.articles);
-                self.setState({articles: response.data.articles, title: response.data.title});
+            .then(function (response) {
+                console.log("Articles For This Tag: ", response.data.tag);
+                const tag = response.data.tag.title;
+                const articles = response.data.articles
+                self.setState({ articles: articles, title: tag, articlesTag: response.data.tag.articles.map(st=>st.id)});
             })
-            .catch(function (error){
+            .catch(function (error) {
                 console.log(error.message);
             })
-            .finally(function (){})
+            .finally(function () { })
     }
 
-    onSubmitHandler = () =>{
+    onSubmitHandler = () => {
         const self = this;
-        const tagPost = self.state;
+        const data = {
+            title: this.state.title,
+            articles: this.state.selectedArticles
+        }
         let id = this.props.match.params.id;
-        axios.post('/tags/edit/' + id, tagPost)
+        axios.post('/tags/edit/' + id, data)
             .then(response => {
-                console.log('Tag posted: ', tagPost);
-                self.setState({posted: true});
+                console.log('Tag posted: ', data);
+                self.setState({ posted: true });
                 this.props.onGetError(response.data.message);
                 this.props.history.push('/tags');
             })
-            .catch(function (error){
-                self.setState({posted: false});
+            .catch(function (error) {
+                self.setState({ posted: false });
                 self.props.onGetError(error.message);
             })
             .finally(function () { });
     }
 
-    render(){
-        return(
+    render() {
+        return (
             <Layout title="Tag Edit">
                 {!this.state.posted ? <Alert mode="danger" msg={this.props.tagResponseMessage} /> : null}
-                <Input 
+                <Input
                     label="Tag"
                     elementType="input"
                     type="text" id="title" name="title"
                     value={this.state.title}
-                    changed={this.changedTagHandler} 
+                    changed={this.changedTagHandler}
                 />
                 <Input
                     label="Articles"
-                    elementType="select" 
+                    elementType="select"
                     multiple
                     options={this.state.articles}
+                    selected={this.state.articlesTag}
                 />
                 <div className="form-controls">
                     <button className="btn btn-danger" type="button" onClick={this.onSubmitHandler}>Edit Tag</button>
@@ -85,8 +104,8 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-    return{
-        onGetError: (error) => dispatch({type: actionType.POST_RESPONSE_MESSAGE, error: error})
+    return {
+        onGetError: (error) => dispatch({ type: actionType.POST_RESPONSE_MESSAGE, error: error })
     }
 }
 

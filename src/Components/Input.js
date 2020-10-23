@@ -25,10 +25,13 @@ const textInput = (props) => {
             inputElement = (
                 <select
                     className="form-control"
-                    value={props.value}
+                    value={props.values}
                     onChange={props.changed} multiple={props.multiple}>
                     {props.options.map((option, key) => (
-                        <option key={key} value={option.title}>{option.title}</option>
+                        <option 
+                            key={key} 
+                            selected={props.selected ? props.selected.includes(option.id) ? true: false : null} 
+                            value={option.id}>{option.title}</option>
                     ))}
                 </select>
             );

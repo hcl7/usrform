@@ -16,8 +16,8 @@ class ArticleView extends Component {
         const self = this;
         axios.get('/articles/view/' + id)
             .then(function (response) {
-                const article = response.data;
-                console.log('tags: ', article.tags);
+                const article = response.data.article;
+                console.log('Tags: ', article.tags);
                 self.setState({ article: article, tags: article.tags});
             })
             .catch(function (error) {
