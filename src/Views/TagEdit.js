@@ -11,7 +11,7 @@ class TagEdit extends Component {
         title: '',
         articles: [],
         posted: true,
-        selectedArticles: {},
+        selectedArticles: [],
         articlesTag: []
     }
 
@@ -34,6 +34,24 @@ class TagEdit extends Component {
         this.setState({ selectedArticles: value });
     }
 
+    updateSelectedArticles = () => {
+        const articles = this.state.articles;
+        const tmp = this.state.articlesTag;
+        for (let i = 0, l = tmp.length; i < l; i++) {
+            articles.map(article => {
+                if (article.id === tmp[i]) {
+                    this.setState({
+                        selectedArticles: [
+                            ...this.state.selectedArticles,
+                            article
+                        ]
+                    })
+                }
+            })
+        }
+        console.log('selected: ', this.state.selectedArticles);
+    }
+
     loadTagHandler = () => {
         const self = this;
         let id = this.props.match.params.id;
@@ -42,7 +60,8 @@ class TagEdit extends Component {
                 console.log("Articles For This Tag: ", response.data.tag);
                 const tag = response.data.tag.title;
                 const articles = response.data.articles
-                self.setState({ articles: articles, title: tag, articlesTag: response.data.tag.articles.map(st=>st.id)});
+                self.setState({ articles: articles, title: tag, articlesTag: response.data.tag.articles.map(sa => sa.id) });
+                self.updateSelectedArticles();
             })
             .catch(function (error) {
                 console.log(error.message);
@@ -86,6 +105,7 @@ class TagEdit extends Component {
                     label="Articles"
                     elementType="select"
                     multiple
+                    changed={this.changedSelectedArticlesHandler}
                     options={this.state.articles}
                     selected={this.state.articlesTag}
                 />

@@ -29,7 +29,7 @@ class ArticleEdit extends Component {
                 console.log('Artcle data: ', response.data);
                 const article = response.data.article;
                 const tags = response.data.tags;
-                self.setState({ title: article.title, body: article.body, tags: tags, tagsArticle: article.tags.map(sa=>sa.id)});
+                self.setState({ title: article.title, body: article.body, tags: tags, tagsArticle: article.tags.map(st=>st.id)});
 
             })
             .catch(function (error) {
