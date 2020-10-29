@@ -34,20 +34,20 @@ class TagEdit extends Component {
         this.setState({ selectedArticles: value });
     }
 
-    updateSelectedArticles = () => {
+    addArticlesTagToSelectedArticles(){
         const articles = this.state.articles;
-        const tmp = this.state.articlesTag;
-        for (let i = 0, l = tmp.length; i < l; i++) {
-            articles.map(article => {
-                if (article.id === tmp[i]) {
+        const articlesTag = this.state.articlesTag;
+        for (let i = 0, l = articlesTag.length; i < l; i++) {
+            articles.forEach(article => {
+                if (article.id === articlesTag[i]) {
                     this.setState({
                         selectedArticles: [
                             ...this.state.selectedArticles,
                             article
                         ]
-                    })
+                    });
                 }
-            })
+            });
         }
         console.log('selected: ', this.state.selectedArticles);
     }
@@ -59,9 +59,9 @@ class TagEdit extends Component {
             .then(function (response) {
                 console.log("Articles For This Tag: ", response.data.tag);
                 const tag = response.data.tag.title;
-                const articles = response.data.articles
+                const articles = response.data.articles;
                 self.setState({ articles: articles, title: tag, articlesTag: response.data.tag.articles.map(sa => sa.id) });
-                self.updateSelectedArticles();
+                self.addArticlesTagToSelectedArticles();
             })
             .catch(function (error) {
                 console.log(error.message);

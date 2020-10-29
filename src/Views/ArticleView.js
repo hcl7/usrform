@@ -4,6 +4,7 @@ import { sideList, formatDate } from '../Helpers/RoutersConfig';
 import Navigation from './Navigation';
 import Header from '../Components/Header';
 import axios from '../hoc/axios-baseurl';
+import { NavLink } from 'react-router-dom';
 
 class ArticleView extends Component {
 
@@ -41,7 +42,7 @@ class ArticleView extends Component {
                     </div>
                     <div className="col-sm-8">
                         <Header header="Article" />
-                        <div className="media border p-3">
+                        <div className="media border p-3" style={{marginBottom:'10px'}}>
                             <div className="media-body">
                                 <p>Title:</p>
                                 <p>Posted on:</p>
@@ -56,8 +57,9 @@ class ArticleView extends Component {
                                     return (<div key={value.title}>{value.title}</div>);
                                 })}</i></small>
                             </div>
-
+                            <NavLink className="btn btn-outline-danger" to={'/articles/edit/'+this.state.article.id}>Edit</NavLink>
                         </div>
+                        <NavLink className="btn btn-outline-info" to={'/articles/'}>Articles</NavLink>
                     </div>
                 </div>
             </div>

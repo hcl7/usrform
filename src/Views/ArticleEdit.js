@@ -30,7 +30,7 @@ class ArticleEdit extends Component {
                 const article = response.data.article;
                 const tags = response.data.tags;
                 self.setState({ title: article.title, body: article.body, tags: tags, tagsArticle: article.tags.map(st=>st.id)});
-
+                self.addTagsArticleToSelectedTags();
             })
             .catch(function (error) {
                 console.log("Get Error User:" + error.message);
@@ -57,6 +57,24 @@ class ArticleEdit extends Component {
         this.setState({selected: value});
     }
 
+    addTagsArticleToSelectedTags(){
+        const tags = this.state.tags;
+        const tagsArticle = this.state.tagsArticle;
+        for(let i=0,l=tagsArticle.length; i<l; i++){
+            tags.forEach(tag => {
+                if(tag.id === tagsArticle[i]){
+                    this.setState({
+                        selected: [
+                            ...this.state.selected,
+                            tag
+                        ]
+                    });
+                }
+            });
+        }
+        console.log('selected: ', this.state.selected);
+    }
+
     onSubmitHandler = (e) => {
         const self = this;
         const dataPost = {
@@ -81,7 +99,6 @@ class ArticleEdit extends Component {
     }
 
     render() {
-        console.log(this.state.selected);
         return (
             <Layout title="Article Edit">
                 {!this.state.posted ? <Alert mode="danger" msg={this.props.articleResponseMessage} /> : null}
@@ -108,7 +125,7 @@ class ArticleEdit extends Component {
                     multiple
                     changed={this.changedSelectHandler}
                     options={this.state.tags}
-                    selected={this.state.tagsArticle} // [1,3]
+                    selected={this.state.tagsArticle}
                 />
                 <div className="form-group">
                     <button className="btn btn-danger" type="button" onClick={this.onSubmitHandler.bind(this)}>Edit Article</button>

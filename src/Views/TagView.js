@@ -6,6 +6,7 @@ import SideBar from './Sidebar';
 import Header from '../Components/Header';
 import SmartList from '../hoc/SmartList';
 import swal from 'sweetalert';
+import { NavLink } from 'react-router-dom';
 
 class TagView extends Component {
     state = {
@@ -91,7 +92,7 @@ class TagView extends Component {
                     </div>
                     <div className="col-sm-8">
                         <Header header="Tag" />
-                        <div className="media border p-3">
+                        <div className="media border p-3" style={{marginBottom:'10px'}}>
                             <div className="media-body">
                                 <p>Title:</p>
                                 <p>ID:</p>
@@ -105,6 +106,7 @@ class TagView extends Component {
                                 <p><small><i>{formatDate(this.state.tag.modified)}</i></small></p>
                             </div>
                         </div>
+                        <NavLink className="btn btn-outline-info" to='/tags'>Tags</NavLink>
                         <Header header="Articles Related" />
                         <div className="media border p-3">
                             <SmartList
